@@ -15,7 +15,13 @@ const createGameboard = () => {
         if (col + ship.length > board[0].length && direction === 'horizontal') return false
         if (row + ship.length > board.length && direction === 'vertical') return false
 
-        // 4. Place the ship onto the board
+        // 4. Direction-specific ship overlap checking
+        for (let i = 0; i < ship.length; i++) {
+            if (direction === 'horizontal' && board[row][col+i] != null) return false 
+            if (direction === 'vertical' && board[row+i][col] != null) return false
+        }
+    
+        // 5. Place the ship onto the board
         for (let i = 0; i < ship.length; i++) {
             if (direction === 'horizontal') {
                 board[row][col+i] = ship
