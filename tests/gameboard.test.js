@@ -20,6 +20,19 @@ test('create a ship and place horizontally on board with length 3', () => {
     expect(gameboard.board[2][4] === ship).toBe(true)
 })
 
+test('create a ship and place vertically on board with length 3', () => {
+    // create empty board
+    const gameboard = createGameboard()
+    expect(gameboard.board[4][4] === null).toBe(true)
+    // place ship
+    const ship = createShip(3)
+    gameboard.placeShip(4, 4, ship, 'vertical')
+    expect(gameboard.board[4][4] === ship).toBe(true)
+    // check it is spanning horizontal with a length of 3
+    expect(gameboard.board[5][4] === ship).toBe(true)
+    expect(gameboard.board[6][4] === ship).toBe(true)
+})
+
 // test('place ship on a board horizontally', () => {
 //     const testBoard = new Gameboard(10, 10)
 //     const destroyer = new Ship(4)
