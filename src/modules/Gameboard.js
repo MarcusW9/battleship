@@ -3,13 +3,13 @@ import { createShip } from "./Ship"
 const createGameboard = () => {
     const board = Array(10).fill(null).map(() => Array(10).fill(null));
     
-    const placeShip = (x, y, ship, direction) => {
+    const placeShip = (row, col, ship, direction) => {
         if (ship.length > 0) {
             for (let i = 0; i < ship.length; i++) {
                 if (direction === 'horizontal') {
-                    board[x+i][y] = ship
+                    board[row][col+i] = ship
                 } else {
-                    board[x][y+i] = ship
+                    board[row+i][col] = ship
                 }
             }
         }
