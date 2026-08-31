@@ -32,6 +32,22 @@ const createGameboard = () => {
         return true
     }
 
+    const recieveAttack = (row, col) => {
+        // 1. Guard agains out of bounds hit
+        if (row > board.length || col > board[0].length) return false
+
+        // 2. Check if cell is empty
+        if (board[row][col] === null) return false
+
+        // 3. Guard to ensure hit is on a ship
+        if (board[row][col].hits > 0) return false
+
+        // 4. Trigger a hit on a coordinate
+        board[row][col].hits = 1
+
+        //
+    }
+
 
     return {
         board,

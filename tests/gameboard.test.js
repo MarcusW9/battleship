@@ -50,6 +50,12 @@ test('return false if ship being placed overlaps with another', () => {
     expect(gameboard.placeShip(1, 1, ship2,'horizontal')).toBe(false)
 })
 
+test('hit ship and return true to detect a hit on ship', () => {
+    const gameboard = createGameboard()
+    const ship = createShip(3) 
+    gameboard.recieveAttack
+})
+
 // test('place ship on a board horizontally', () => {
 //     const testBoard = new Gameboard(10, 10)
 //     const destroyer = new Ship(4)

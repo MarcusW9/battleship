@@ -1,9 +1,21 @@
 const createShip = (length)  => {
+    
+    let hits = 0;
+
+    const hit = () => {
+            hits++
+        }
+
+    const isSunk = () => {
+        return hits >= length
+    }
+
     return {
-        length : length,
-        hits : 0,
-        sunk : false
-    };
+        length,
+        hit,
+        getHits: () => hits,
+        isSunk
+    }
 }
 
 export { createShip } 

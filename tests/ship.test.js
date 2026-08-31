@@ -5,21 +5,15 @@ test('create ship from factory function', () => {
     expect(testShip.length).toBe(2)
 })
 
-// test('create a ship from class', () => {
-//     const testShip = new Ship(2);
-//     expect(testShip.length).toBe(2)
-//     expect(testShip.hits).toBe(0)
-// })
+test('create a ship and hit it once', () => {
+    const testShip =  createShip(2);
+    expect(testShip.length).toBe(2)
+    expect(testShip.getHits()).toBe(0)
 
-// test('create a ship and hit it once', () => {
-//     const testShip = new Ship(2);
-//     expect(testShip.length).toBe(2)
-//     expect(testShip.hits).toBe(0)
-
-//     testShip.hit() 
-//     expect(testShip.hits).toBe(1)
-//     expect(testShip.isSunk).toBe(false)
-// })
+    testShip.hit() 
+    expect(testShip.getHits()).toBe(1)
+    expect(testShip.isSunk()).toBe(false)
+})
 
 
 // test('create a ship and hit it twice to sink it', () => {
