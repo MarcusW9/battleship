@@ -15,7 +15,6 @@ test('create a ship and hit it once', () => {
     expect(testShip.isSunk()).toBe(false)
 })
 
-
 // test('create a ship and hit it twice to sink it', () => {
 //     const testShip = new Ship(2);
 //     expect(testShip.length).toBe(2)
