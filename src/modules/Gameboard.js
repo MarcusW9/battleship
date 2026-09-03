@@ -19,8 +19,8 @@ const createGameboard = () => {
 
         // 4. Direction-specific ship overlap checking
         for (let i = 0; i < ship.length; i++) {
-            if (direction === 'horizontal' && board[row][col+i] != null) return 'cannot overlap with another ship' 
-            if (direction === 'vertical' && board[row+i][col] != null) return 'cannot overlap with another ship'
+            if (direction === 'horizontal' && board[row][col+i] != null) return 'overlapping' 
+            if (direction === 'vertical' && board[row+i][col] != null) return 'overlapping'
         }
     
         // 5. Place the ship onto the board
@@ -57,7 +57,6 @@ const createGameboard = () => {
         if (board[row][col].isSunk()) {
             return 'sunk'
         }
-
         // Return his if boat is hit but not sunk
         return 'hit'
     }

@@ -36,7 +36,7 @@ test('create a ship and place vertically on board with length 3', () => {
 test('return false for placing ship out of bounds', () => {
     const gameboard = createGameboard()
     const ship = createShip(3)
-    expect(gameboard.placeShip(0, 8, ship,'horizontal')).toBe(false)
+    expect(gameboard.placeShip(0, 8, ship,'horizontal')).toBe('out of bounds')
     // Make sure index 8 and 9 were not written to
     expect(gameboard.board[0][8]).toBeNull();
     expect(gameboard.board[0][9]).toBeNull();
@@ -45,21 +45,15 @@ test('return false for placing ship out of bounds', () => {
 test('return false if ship being placed overlaps with another', () => {
     const gameboard = createGameboard()
     const ship1 = createShip(3) 
-    const ship2 = createShip(3) 
     expect(gameboard.placeShip(1, 1, ship1,'horizontal')).toBe(true)
-    expect(gameboard.placeShip(1, 1, ship2,'horizontal')).toBe(false)
+    const ship2 = createShip(3)
+    expect(gameboard.placeShip(1, 1, ship2,'horizontal')).toBe('overlapping')
 })
 
 test('hit ship and return true to detect a hit on ship', () => {
     const gameboard = createGameboard()
     const ship = createShip(3) 
-    gameboard.recieveAttack
+    gameboard.placeShip(1, 1, ship,'horizontal')
+    expect(gameboard.receiveAttack(1, 1)).toBe('hit')
 })
-
-// test('place ship on a board horizontally', () => {
-//     const testBoard = new Gameboard(10, 10)
-//     const destroyer = new Ship(4)
-//     testBoard.placeShip(5, 5, destroyer, "horizontal")
-//     expect(testBoard.board[5][5]).toBe(destroyer)
-// })
 
