@@ -1,6 +1,6 @@
 export const createPlayer = (name, isHuman = true) => {
     const playerName = name; 
-    let hasWon = false;
+    let won = false;
     const isHuman = false;
     const allMoves = []
 
@@ -34,8 +34,9 @@ export const createPlayer = (name, isHuman = true) => {
 
     return { 
         playerName,
-        hasWon,
         attack,
-        computerMove
+        computerMove,
+        get hasWon() { return won },
+        set hasWon(value) { won = value }
     }
 }
