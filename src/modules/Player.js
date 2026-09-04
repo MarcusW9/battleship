@@ -1,7 +1,6 @@
 export const createPlayer = (name, isHuman = true) => {
     const playerName = name; 
     let won = false;
-    const isHuman = false;
     const allMoves = []
 
     const attack = (gameboard, row, col) => {
