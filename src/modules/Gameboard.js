@@ -63,15 +63,20 @@ const createGameboard = () => {
 
 
     const allShipsSunk = () => {
-
+        // Guard to prevent an empty board with no ships winning the game
+        for (let i = 0; i < ships.length; i++) {
+        // isSunk() returns false if the ship is alive and returns false
+            if (!ships[i].isSunk()) return false;
+        }
+        // if all ships are sunk the loop finishes and returns true
+        return true
     }
     
-
-
     return {
         board,
         placeShip,
-        receiveAttack
+        receiveAttack,
+        allShipsSunk
     };
 };
 
