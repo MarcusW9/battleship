@@ -1,3 +1,11 @@
+const SHIP_PRESETS = {
+    Destroyer: 2,
+    Submarine: 3,
+    Cruiser: 3,
+    Battleship: 4,
+    Carrier: 5
+}
+
 const createShip = (type, customLength)  => {
 
     // Refer to presets for length if null / invalid fallback to customLength
@@ -30,14 +38,6 @@ const createShip = (type, customLength)  => {
         getHits: () => hits,
         isSunk
     }
-}
-
-const SHIP_PRESETS = {
-    Destroyer: 2,
-    Submarine: 3,
-    Cruiser: 3,
-    Battleship: 4,
-    Carrier: 5
 }
 
 export { createShip, SHIP_PRESETS } 
