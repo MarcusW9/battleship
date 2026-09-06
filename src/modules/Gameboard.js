@@ -8,7 +8,11 @@ const createGameboard = () => {
     const placeShip = (row, col, ship, direction) => {
 
         // 1. Guard against invalid ship objects
-        if (!ship || ship.length <= 0) return 'negative ship length';
+        if (!ship || ship.length <= 0) return {
+            success: false,
+            status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
+            message: 'Invalid ship length of less than 0',
+        };
 
         // 2. Guard against negative starting coordinates
         if (row < 0 || col < 0) return 'out of bounds';

@@ -1,31 +1,16 @@
 import { createShip } from "../src/modules/Ship.js";
 
 test('create ship from factory function', () => {
-    const testShip = createShip(2)
-    expect(testShip.length).toBe(2)
+    const testShip = createShip('Cruiser')
+    expect(testShip.length).toBe(3)
 })
 
 test('create a ship and hit it once', () => {
-    const testShip =  createShip(2);
-    expect(testShip.length).toBe(2)
+    const testShip =  createShip('Cruiser');
+    expect(testShip.length).toBe(3)
     expect(testShip.getHits()).toBe(0)
 
     testShip.hit() 
     expect(testShip.getHits()).toBe(1)
     expect(testShip.isSunk()).toBe(false)
 })
-
-// test('create a ship and hit it twice to sink it', () => {
-//     const testShip = new Ship(2);
-//     expect(testShip.length).toBe(2)
-//     expect(testShip.hits).toBe(0)
-
-//     testShip.hit() 
-//     expect(testShip.hits).toBe(1)
-//     expect(testShip.isSunk).toBe(false)
-    
-//     testShip.hit() 
-//     expect(testShip.hits).toBe(2)
-//     expect(testShip.isSunk).toBe(true)
-// })
-
