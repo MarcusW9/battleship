@@ -27,14 +27,29 @@ export const createGameController = (
         
         // 3. If attack returned false (e.g., cell [row, col] was already shot),
         // stop here so player can try a different cell
-        if (!activeTurn) return 
+        if (!activeTurn) return {
+            success: false,
+            status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
+            message: 'You have already fired at this coordinate!'
+        }
 
         // 4. If all ships sunk as a result of this hit trigger win 
-        if (defendingBoard.allShipsSunk()) return 'win'
+        if (defendingBoard.allShipsSunk()) return {
+            success: true,
+            status: 'win',
+            message: `${activePlayer.name} has sunk all opposing ships!`,
+            data: { winner: activePlayer }
+        }
 
         // 5. Valid move and game continues
+        const turnSummary = {
+            success: true,
+            status: 'played',
+            message: `${activePlayer.name}'s shot completed.`,
+            data: { activePlayer }
+        }; // Need to capture activePlayer now before triggering switchTurn
         switchTurn()
-        return true
+        return turnSummary
     }
 
     return {

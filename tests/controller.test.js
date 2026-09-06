@@ -16,16 +16,28 @@ test('gameController defaults to player1 TestName first then switches turns afte
     const gameController = createGameController('TestName')
     const ship1 = createShip(3)
 
-    // By default first human player
-    expect(gameController.activePlayer.playerName).toEqual('TestName')
+    // 1. By default first human player
+    expect(gameController.activePlayer.playerName).toBe('TestName')
     gameController.player2Gameboard.placeShip(1, 1, ship1, 'horizontal')
-    // Play turn
+
+    // 2. Play turn
     expect(gameController.playTurn(1, 1)).toBe(true)
-    // After turn test who is the player now
-    expect(gameController.activePlayer.playerName).toEqual('Computer')
+
+    // 3. After turn test who is the player now
+    expect(gameController.activePlayer.playerName).toBe('Computer')
 })
 
-test('player is associated with the correct board', () => {
-    const gameController = createGameController('TestName')
-    //expect(gameController.)
-})
+test('Player 1 and Player 2 maintain separate defending boards', () => {
+    const controller = createGameController();
+
+    // 1. Place a ship ONLY on Player 1's board
+    controller.player1Gameboard.placeShip(0, 0, createShip('Cruiser'), 'horizontal');
+
+    // 2. Player 1 attacks Player 2 at (0, 0) -> Should MISS (Player 2 has no ship here)
+    const p1Turn = controller.playTurn(0, 0); 
+    expect(p1Turn).toBe('miss');
+
+    // 3. Player 2 attacks Player 1 at (0, 0) -> Should HIT (Player 1 has a ship here)
+    const p2Turn = controller.playTurn(0, 0); 
+    expect(p2Turn.status).toBe('hit');
+});
