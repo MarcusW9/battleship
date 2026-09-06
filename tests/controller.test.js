@@ -1,4 +1,4 @@
-import { createGameController } from "../src/modules/controller.js"
+import { createGameController } from "../src/modules/Controller.js"
 import { createShip } from "../src/modules/Ship.js"
 
 
