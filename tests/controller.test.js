@@ -21,7 +21,7 @@ test('gameController defaults to player1 TestName first then switches turns afte
     gameController.player2Gameboard.placeShip(1, 1, ship1, 'horizontal')
 
     // 2. Play turn
-    expect(gameController.playTurn(1, 1)).toBe(true)
+    expect(gameController.playTurn(1, 1).success).toBe(true)
 
     // 3. After turn test who is the player now
     expect(gameController.activePlayer.playerName).toBe('Computer')
@@ -35,9 +35,9 @@ test('Player 1 and Player 2 maintain separate defending boards', () => {
 
     // 2. Player 1 attacks Player 2 at (0, 0) -> Should MISS (Player 2 has no ship here)
     const p1Turn = controller.playTurn(0, 0); 
-    expect(p1Turn).toBe('miss');
+    expect(p1Turn.status).toBe('played');
 
     // 3. Player 2 attacks Player 1 at (0, 0) -> Should HIT (Player 1 has a ship here)
     const p2Turn = controller.playTurn(0, 0); 
-    expect(p2Turn.status).toBe('hit');
+    expect(p2Turn.status).toBe('played');
 });

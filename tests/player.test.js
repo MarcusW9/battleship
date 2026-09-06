@@ -17,7 +17,7 @@ test('return miss for succesful attack trigger on mock gameboard', () => {
 test('return miss for succesful attack trigger on gameboard empty cell', () => {
     const player1 = createPlayer('John');
     const player2Gameboard = createGameboard()
-    expect(player1.attack(player2Gameboard, 1, 1)).toBe('miss')
+    expect(player1.attack(player2Gameboard, 1, 1).status).toBe('miss')
 })
 
 test('hasWon to be false initially and then return true after setting to won', () => {

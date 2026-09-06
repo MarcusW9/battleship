@@ -15,18 +15,36 @@ const createGameboard = () => {
         };
 
         // 2. Guard against negative starting coordinates
-        if (row < 0 || col < 0) return 'out of bounds';
-        
+        if (row < 0 || col < 0) return {
+            success: false,
+            status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
+            message: 'Out of bounds',   
+        };
         // 3. Direction-specific bounds checking
-        if (col + ship.length > board[0].length && direction === 'horizontal') return 'out of bounds'
-        if (row + ship.length > board.length && direction === 'vertical') return 'out of bounds'
+        if (col + ship.length > board[0].length && direction === 'horizontal') return {
+            success: false,
+            status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
+            message: 'Out of bounds',   
+        };
+        if (row + ship.length > board.length && direction === 'vertical') return {
+            success: false,
+            status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
+            message: 'Out of bounds',   
+        };
 
         // 4. Direction-specific ship overlap checking
         for (let i = 0; i < ship.length; i++) {
-            if (direction === 'horizontal' && board[row][col+i] != null) return 'overlapping' 
-            if (direction === 'vertical' && board[row+i][col] != null) return 'overlapping'
-        }
-    
+                if (direction === 'horizontal' && board[row][col+i] != null) return {
+                success: false,
+                status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
+                message: 'The chosen position is overlapping another ship',   
+            }; 
+                if (direction === 'vertical' && board[row+i][col] != null) return {
+                success: false,
+                status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
+                message: 'The chosen position is overlapping another ship',
+                };
+            }
         // 5. Place the ship onto the board
         for (let i = 0; i < ship.length; i++) {
             if (direction === 'horizontal') {
@@ -38,25 +56,39 @@ const createGameboard = () => {
 
         // 6. Log succesful ship placement and add to total ships
         ships.push(ship)
-        return true
+        return {
+                success: true,
+                status: 'placed', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
+                message: 'Succesful ship placement',   
+            }; 
     }
 
     const receiveAttack = (row, col) => {
         // 1. Guard against out of bounds hit
         if (row < 0 || col < 0 || row >= board.length || col >= board[0].length) return { 
-            success: true,
-            status: 'hit', 
-            message: 'This hit is out of bounds',
-            data : { row, col }
-          }
+                success: false,
+                status: 'invalid', 
+                message: 'This attack is out of bounds',
+                data : { row, col }
+            }
 
         // 2. Guard for if hit already placed on the cell
-        if (trackedHits.has(`${row},${col}`)) return 'We have already targetted this area'
+        if (trackedHits.has(`${row},${col}`)) return { 
+                success: false,
+                status: 'invalid', 
+                message: 'We have already attacked this location',
+                data : { row, col }
+            }
 
         // 3. Check for no ship trigger hit and return miss
         if (board[row][col] === null) {
             trackedHits.add(`${row},${col}`)
-            return 'miss'
+            return { 
+                success: true,
+                status: 'miss', 
+                message: 'Our attack fired and missed!',
+                data : { row, col }
+            }
         }
         // 4. Trigger a hit on the coordinate if there is a ship
         board[row][col].hit()
@@ -64,10 +96,20 @@ const createGameboard = () => {
 
         // 5. Return sunk if the boat hit is now sunk
         if (board[row][col].isSunk()) {
-            return 'sunk'
+            return { 
+                success: true,
+                status: 'sunk', 
+                message: 'You have sunk the ship!',
+                data : { row, col }
+            }
         }
         // Return his if boat is hit but not sunk
-        return 'hit'
+        return { 
+                success: true,
+                status: 'hit', 
+                message: 'Your attack hit the ship!',
+                data : { row, col }
+        }
     }
 
 

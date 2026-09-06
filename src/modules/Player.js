@@ -24,10 +24,15 @@ export const createPlayer = (name, isHuman = true) => {
     }
 
     const computerMove = () => {
+
+        // 1. Guard against if human player, no need to run this
+        if (isHuman === true) return null 
+
         const randomIndex = movePicker();
         const lastIndex = allMoves.length - 1;
 
-        [allMoves[randomIndex], allMoves[lastIndex]] = [allMoves[lastIndex], allMoves[randomIndex]]
+        // Fisher-Yates shuffle algorithm
+        [allMoves[randomIndex], allMoves[lastIndex]] = [allMoves[lastIndex], allMoves[randomIndex]] // Tuple swap pattern
         return allMoves.pop()
     }
 
