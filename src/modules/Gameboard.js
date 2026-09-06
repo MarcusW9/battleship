@@ -39,7 +39,12 @@ const createGameboard = () => {
 
     const receiveAttack = (row, col) => {
         // 1. Guard against out of bounds hit
-        if (row < 0 || col < 0 || row >= board.length || col >= board[0].length) return false
+        if (row < 0 || col < 0 || row >= board.length || col >= board[0].length) return { 
+            success: true,
+            status: 'hit', 
+            message: 'This hit is out of bounds',
+            data : { row, col }
+          }
 
         // 2. Guard for if hit already placed on the cell
         if (trackedHits.has(`${row},${col}`)) return 'We have already targetted this area'
@@ -63,12 +68,17 @@ const createGameboard = () => {
 
 
     const allShipsSunk = () => {
-        // Guard to prevent an empty board with no ships winning the game
+        // 1. Guard if no ships no need to check sunk
+        if (ships.length === 0) return false;
+
+        // 2. Guard to prevent an empty board with no ships winning the game
         for (let i = 0; i < ships.length; i++) {
-        // isSunk() returns false if the ship is alive and returns false
+
+        // 3. isSunk() returns false if the ship is alive and returns false
             if (!ships[i].isSunk()) return false;
         }
-        // if all ships are sunk the loop finishes and returns true
+
+        // 4. if all ships are sunk the loop finishes and returns true
         return true
     }
     

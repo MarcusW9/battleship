@@ -3,7 +3,7 @@ import { createPlayer } from "./Player"
 
 export const createGameController = (
     player1Name = 'You', 
-    player2Name = 'computer', 
+    player2Name = 'Computer', 
     isPlayer2Human = false
 ) => {
     const player1 = createPlayer(player1Name, true)
@@ -42,7 +42,8 @@ export const createGameController = (
         get player2() { return player2 } ,
         get player1Gameboard() { return player1Gameboard },
         get player2Gameboard() { return player2Gameboard },
-        get activePlayer() { return activePlayer }
+        get activePlayer() { return activePlayer },
+        playTurn
     }
 }
 
