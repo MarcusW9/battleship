@@ -79,15 +79,15 @@ const createGameboard = () => {
                     return 'vertical'
                 }
             }
-            
-        for (let i = 0; i < SHIP_PRESETS.length; i++) {
+        
+        for (const shipType of SHIP_PRESETS) {
             let didShipPlace = false
 
             // Loop until a succesful placed object is returned
             while (didShipPlace === false) {
                 // Create a new ship of the one we currently are adding 
                 // each loop so we don't modify the original 
-                const shipTemplate = createShip(SHIP_PRESETS[i])
+                const shipTemplate = createShip(shipType)
 
                 // Object is returned with a 'Success : true /false'
                 const placeShipReturnObject = placeShip(generateRandomRow(), generateRandomCol(), shipTemplate, generateRandomDirection())
