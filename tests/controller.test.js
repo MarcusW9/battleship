@@ -9,7 +9,6 @@ test('gameController succesfully creates default one human player and computer',
     expect(gameController.player2.playerName).toEqual('Computer')
 })
 
-
 // Integration test to triggger succesful attack on the boar 
 // and logic for switch turns
 test('gameController defaults to player1 TestName first then switches turns after attack to computer', () => {
@@ -41,3 +40,29 @@ test('Player 1 and Player 2 maintain separate defending boards', () => {
     const p2Turn = controller.playTurn(0, 0); 
     expect(p2Turn.status).toBe('played');
 });
+
+
+test('Computer automatically plays move when its their turn', () => {
+    // 1.Create a controller with two players one human one ai
+    const gameController = createGameController('TestName')
+    expect(gameController.player1.playerName).toEqual('TestName')
+    expect(gameController.player2.playerName).toEqual('Computer') 
+
+    // 2. First should be human
+    expect(gameController.activePlayer.playerName).toBe("TestName")
+
+    // 3. Human plays turn and this should trigger switch to Computer
+    expect(gameController.playTurn(1, 1).success).toBe(true)
+    expect(gameController.activePlayer.playerName).toBe("Computer")
+
+    // 4. Computer takes turn
+    const computerResult = gameController.automaticComputerMove();
+    
+    // Verify computer turn succeeded
+    expect(computerResult.success).toBe(true);
+    expect(computerResult.status).toBe('played');
+
+    // 5. Turn should now be back to human
+    expect(gameController.activePlayer.playerName).toBe("TestName");
+})
+

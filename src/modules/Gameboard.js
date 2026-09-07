@@ -1,4 +1,4 @@
-import { createShip } from "./Ship.js"
+import { createShip, SHIP_PRESETS } from "./Ship.js"
 
 const createGameboard = () => {
     const board = Array(10).fill(null).map(() => Array(10).fill(null));
@@ -63,6 +63,39 @@ const createGameboard = () => {
             }; 
     }
 
+    const automaticallyPlaceShips = () => {
+
+        const generateRandomRow = () => {
+                return Math.floor(Math.random()*board[0].length)
+            }
+        const generateRandomCol = () => {
+                return Math.floor(Math.random()*board.length)
+            }
+        const generateRandomDirection = () => {
+                const randomNumber = Math.ceil((Math.random())*100) 
+                if (randomNumber > 50) { 
+                    return 'horizontal' 
+                } else {
+                    return 'vertical'
+                }
+            }
+            
+        for (let i = 0; i < SHIP_PRESETS.length; i++) {
+            let didShipPlace = false
+
+            // Loop until a succesful placed object is returned
+            while (didShipPlace === false) {
+                // Create a new ship of the one we currently are adding 
+                // each loop so we don't modify the original 
+                const shipTemplate = createShip(SHIP_PRESETS[i])
+
+                // Object is returned with a 'Success : true /false'
+                const placeShipReturnObject = placeShip(generateRandomRow(), generateRandomCol(), shipTemplate, generateRandomDirection())
+                didShipPlace = placeShipReturnObject.success
+            }
+        }
+    }
+
     const receiveAttack = (row, col) => {
         // 1. Guard against out of bounds hit
         if (row < 0 || col < 0 || row >= board.length || col >= board[0].length) return { 
@@ -111,7 +144,6 @@ const createGameboard = () => {
                 data : { row, col }
         }
     }
-
 
     const allShipsSunk = () => {
         // 1. Guard if no ships no need to check sunk

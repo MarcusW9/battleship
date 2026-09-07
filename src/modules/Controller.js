@@ -12,15 +12,19 @@ export const createGameController = (
 
     const player1Gameboard = createGameboard()
     const player2Gameboard = createGameboard()
+    
+    const getDefendingBoard = () => {
+            return activePlayer === player1 ? player2Gameboard : player1Gameboard 
+        }
+
+    const switchTurn = () => {
+            activePlayer = activePlayer === player1 ? player2 : player1;
+        }
 
     const playTurn = (row, col) => {
 
         // 1. Pick target board based on active player
-        const defendingPlayer = activePlayer === player1 ? player2 : player1;
-        const defendingBoard = defendingPlayer === player2 ? player2Gameboard : player1Gameboard;
-        const switchTurn = () => {
-            activePlayer = activePlayer === player1 ? player2 : player1
-        }
+        const defendingBoard = getDefendingBoard()
         
         // 2. trigger an attack on the defending board target
         const activeTurn = defendingBoard.receiveAttack(row, col);
@@ -37,7 +41,7 @@ export const createGameController = (
         if (defendingBoard.allShipsSunk()) return {
             success: true,
             status: 'win',
-            message: `${activePlayer.name} has sunk all opposing ships!`,
+            message: `${activePlayer.playerName} has sunk all opposing ships!`,
             data: { winner: activePlayer }
         }
 
@@ -45,12 +49,26 @@ export const createGameController = (
         const turnSummary = {
             success: true,
             status: 'played',
-            message: `${activePlayer.name}'s shot completed.`,
-            data: { activePlayer }
+            message: `${activePlayer.playerName}'s shot completed.`,
+            data: { activePlayer, attackResult: activeTurn }
         }; // Need to capture activePlayer now before triggering switchTurn
-        switchTurn()
-        return turnSummary
+
+        switchTurn();
+        return turnSummary;
     }
+
+    const automaticComputerMove = () => {
+        if (activePlayer.isHuman) return null;
+
+        // 1. Get AI coordinates
+        const move = activePlayer.computerMove();
+        if (!move) return null;
+
+        const [row, col] = move;
+
+        // 2. Simply delegate to playTurn!
+        return playTurn(row, col);
+    };
 
     return {
         get player1() { return player1 },
@@ -58,7 +76,8 @@ export const createGameController = (
         get player1Gameboard() { return player1Gameboard },
         get player2Gameboard() { return player2Gameboard },
         get activePlayer() { return activePlayer },
-        playTurn
+        playTurn,
+        automaticComputerMove
     }
 }
 
