@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Marcus' Battleship</title>
+        <link rel="stylesheet" href="style.css">
+  <!-- Use type="module" to allow ES6 import/export statements -->
+        <script src="index.js" type="module" defer></script>
+    </head>
+    <body>
+    <header>
+        <h1>BATTLESHIP</h1>
+        <p>Prepare your fleet for battle!</p>
+    </header>
+
+<!-- SCREEN 2: Player Setup -->
+    <section id="setup-screen" class="screen">
+        <form id="start-form">
+            <label for="player-name">Enter Commander Name:</label>
+            <input type="text" id="player-name" placeholder="Admiral" required />
+            <button type="submit" class="btn">Deploy Fleet</button>
+        </form>
+    </section>
+
+<!-- SCREEN 2: Battle Arena (HIDDEN on page load) -->
+    <section id="battle-screen" class="screen hidden">
+        <header>
+            <h2 id="player-title">Admiral's Fleet</h2>
+        </header>
+
+        <main class="game-container">
+            <div id="player-board" class="grid"></div>
+            <div id="enemy-board" class="grid"></div>
+        </main>
+    </section>
+  </body>
+</html>

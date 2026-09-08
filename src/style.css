@@ -1,0 +1,12 @@
+body {
+    background-color: #152BE6;
+}
+
+.hidden {
+    display:none;
+}
+
+#setup-screen {
+    height: max-content;
+    background-color: red;
+}
