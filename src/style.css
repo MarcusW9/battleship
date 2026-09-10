@@ -1,11 +1,12 @@
 body {
-    background-color: #152BE6;
+    background-color: #DBDBDB;
     font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     min-height: 100vh;
+    width: 100vw;
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column
+    flex-direction: column;
 }
 
 header {
@@ -39,8 +40,19 @@ header > p {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: red;
     width: 100%;
+}
+
+#form-image {
+    margin: 0;
+    padding: 0;
+    z-index: -1;
+    position: absolute;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 #start-form {
@@ -48,10 +60,22 @@ header > p {
   /* Column 1 auto-fits label text; Column 2 takes remaining space */
   grid-template-columns: auto 1fr; 
   gap: 1rem;            /* Spacing between all grid items */
-  align-items: center;  /* Vertically centers label with input */
-  max-width: 450px;     /* Prevents form from stretching too wide */
+  align-items: center;  
+  width: 50%;
+  max-width: 75%;    /* Prevents form from stretching too wide */
   margin: 0 auto;       /* Centers form box horizontally */
 }
+
+#start-form > label {
+    font-size: 24px;
+}
+
+#start-form > input {
+    font-size: 18px;
+    width: auto;
+    height: 2em;
+}
+
 
 #start-form button {
   grid-column: 1 / -1;  /* Spans from column line 1 to the end */
@@ -59,4 +83,37 @@ header > p {
   padding: 0.75rem;
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   font-size: 28px;
+}
+
+
+/* ==========================================
+   MOBILE STYLES (Applies to screens ≤ 600px)
+   ========================================== */
+@media (max-width: 600px) {
+    header > h1 {
+        font-size: 38px; /* Slightly smaller header for phone screens */
+    }
+
+    #start-form {
+        /* Switch from a 2-column grid to a single vertical column on phones */
+        grid-template-columns: 1fr; 
+        width: 90%;
+        padding: 1rem;
+        gap: 0.5rem;
+    }
+
+    #start-form > label {
+        font-size: 20px;
+        text-align: center; /* Center label text above input */
+    }
+
+    #start-form > input {
+        width: 100%;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    #start-form button {
+        font-size: 22px;
+    }
 }
