@@ -1,12 +1,62 @@
 body {
     background-color: #152BE6;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column
 }
+
+header {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100px;
+}
+
+header > h1 { 
+    margin: 0.25em 0 0 0 ;
+    padding: 0;
+    font-size: 56px;
+}
+
+header > p { 
+    margin: 0.25em 0 0.25em 0;
+    font-size: 18px;
+}
+
 
 .hidden {
     display:none;
 }
 
 #setup-screen {
-    height: max-content;
+    flex: 1; /* Takes up ALL remaining vertical space below header */
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: red;
+    width: 100%;
+}
+
+#start-form {
+  display: grid;
+  /* Column 1 auto-fits label text; Column 2 takes remaining space */
+  grid-template-columns: auto 1fr; 
+  gap: 1rem;            /* Spacing between all grid items */
+  align-items: center;  /* Vertically centers label with input */
+  max-width: 450px;     /* Prevents form from stretching too wide */
+  margin: 0 auto;       /* Centers form box horizontally */
+}
+
+#start-form button {
+  grid-column: 1 / -1;  /* Spans from column line 1 to the end */
+  margin-top: 0.5rem;   /* Optional extra space above button */
+  padding: 0.75rem;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 28px;
 }
