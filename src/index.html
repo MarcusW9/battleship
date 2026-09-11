@@ -9,31 +9,38 @@
         <script src="index.js" type="module" defer></script>
     </head>
     <body>
-    <header>
-        <h1>BATTLESHIP</h1>
-        <p>Prepare your fleet for battle!</p>
-    </header>
-
-<!-- SCREEN 1: Player Setup -->
-    <section id="setup-screen" class="screen">
-        <img id="form-image" src="./assets/Setup_Screen_Background.jpg" alt="Battleship in the ocean">
-        <form id="start-form">
-            <label for="player-name">Enter Commander Name:</label>
-            <input type="text" id="player-name" placeholder="Admiral" required />
-            <button type="submit" class="btn">Deploy Fleet</button>
-        </form>
-    </section>
-
-<!-- SCREEN 2: Battle Arena (HIDDEN on page load) -->
-    <section id="battle-screen" class="screen hidden">
         <header>
-            <h2 id="player-title">Admiral's Fleet</h2>
+            <h1>BATTLESHIP</h1>
+            <p>Prepare your fleet for battle!</p>
         </header>
 
-        <main class="game-container">
-            <div id="player-board" class="grid"></div>
-            <div id="enemy-board" class="grid"></div>
-        </main>
-    </section>
-  </body>
+<!-- SCREEN 1: Player Setup -->
+        <section id="setup-screen" class="screen">
+            <img id="form-image" src="./assets/Setup_Screen_Background.jpg" alt="Battleship in the ocean">
+            <form id="start-form">
+                <label for="player-name">Enter Commander Name:</label>
+                <input type="text" id="player-name" placeholder="Admiral" required />
+                <button type="submit" class="btn">Deploy Fleet</button>
+            </form>
+        </section>
+
+<!-- SCREEN 2: Battle Arena (HIDDEN on page load) -->
+        <section id="battle-screen" class="screen hidden">
+            <header>
+                <h2 id="player-title">Admiral's Fleet</h2>
+            </header>
+
+            <main class="game-container">
+                <div id="placement-board">
+                    <div id="placement-board" class="grid"></div>
+                    <button id="start-battle-btn">Engage Enemy</button>
+                </div>
+
+                <div id="combat-view" class="hidden">
+                    <div id="player-board" class="grid"></div>
+                    <div id="enemy-board" class="grid"></div>
+                </div>
+            </main>
+        </section>
+    </body>
 </html>

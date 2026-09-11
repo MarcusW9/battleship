@@ -32,7 +32,7 @@ header > p {
 
 
 .hidden {
-    display:none;
+    display:none !important; /* Need to make it important to override overrules */
 }
 
 #setup-screen {
