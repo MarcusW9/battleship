@@ -20,6 +20,28 @@ export const displayController = {
 
             // 3. Assign correct name to UI 
             playerTitle.textContent = `Awaiting your orders ${admiralName}`
+
+            // 4. Setup board
+            this.setupPlacementPhase()
         })
+    },
+
+    renderBoard(boardElement) {
+        boardElement.innerHTML = "";
+        for (let row = 0; row < 10; row++) {
+            for (let col = 0; col < 10; col++) {
+                const cell = document.createElement("div");
+                cell.classList.add("cell")
+                cell.dataset.x = row;
+                cell.dataset.y = col;
+                boardElement.appendChild(cell);
+            }
+        }
+    },
+
+    setupPlacementPhase() {
+        const placementBoard = document.querySelector("#placement-board")
+        this.renderBoard(placementBoard)
     }
 }
+
