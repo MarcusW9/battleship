@@ -1,3 +1,13 @@
+import { SHIP_PRESETS } from "./Ship"
+
+const fleetQueue = Object.entries(SHIP_PRESETS).map(([shipType, length]) => ({
+        shipType,
+        length
+    }))
+
+let currentShipIndex = 0;
+let currentDirection = "horizontal";
+
 export const displayController = {
         init() {
    
@@ -42,6 +52,35 @@ export const displayController = {
     setupPlacementPhase() {
         const placementBoard = document.querySelector("#placement-board")
         this.renderBoard(placementBoard)
+            
+        // 1. Event listener to detect a hover on the board
+        placementBoard.addEventListener("mouseover",(e) => {
+            
+            // Guard for if not a cell
+            if (!e.target.classList.contains("cell")) return;
+            
+            const currentCellRow = Number(e.target.dataset.x)
+            const currentCellCol = Number(e.target.dataset.y)
+
+        })  
+    },
+
+    getShipCoordinaates(startingRow, startingCol, direction, length) {
+        const coordinates = []
+        for (let i = 0; i < length; i++) {
+            if (direction === "horizontal") {
+        // Row stays fixed, Column increases
+                coordinates.push({ 
+                    row: startingRow, 
+                    col: startingCol + i 
+                });    
+            } else if (direction === "vertical") {
+                coordinates.push({
+                    row: startingRow + i,
+                    col: startingCol
+                });
+            }
+        }
+        return coordinates
     }
 }
-
