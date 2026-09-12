@@ -1,5 +1,9 @@
+import { createGameboard } from "./Gameboard.js";
+import { displayController } from "./displayController.js";
 import { createShip } from "./modules/Ship.js";
-import { displayController } from "./modules/displayController.js";
 
-// Initialize UI listeners when app loads
-displayController.init();
+// 1. Create the player's gameboard instance
+const player1Gameboard = createGameboard();
+
+// 2. Pass it into displayController
+displayController.init(player1Gameboard);

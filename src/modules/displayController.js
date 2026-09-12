@@ -1,4 +1,4 @@
-import { SHIP_PRESETS } from "./Ship"
+import { SHIP_PRESETS, createShip } from "./Ship"
 
 const fleetQueue = Object.entries(SHIP_PRESETS).map(([shipType, length]) => ({
         shipType,
@@ -9,7 +9,7 @@ let currentShipIndex = 0;
 let currentDirection = "horizontal";
 
 export const displayController = {
-        init() {
+        init(player1Gameboard) {
    
         const setupScreen = document.querySelector("#setup-screen")
         const startForm = document.querySelector("#start-form")
@@ -32,11 +32,11 @@ export const displayController = {
             playerTitle.textContent = `Awaiting your orders ${admiralName}`
 
             // 4. Setup board
-            this.setupPlacementPhase()
+            this.setupPlacementPhase(player1Gameboard)
         })
     },
 
-    renderBoard(boardElement) {
+    renderBoard(boardElement, gameboardArray) {
         boardElement.innerHTML = "";
         for (let row = 0; row < 10; row++) {
             for (let col = 0; col < 10; col++) {
@@ -44,14 +44,19 @@ export const displayController = {
                 cell.classList.add("cell")
                 cell.dataset.x = row;
                 cell.dataset.y = col;
+
+                // On every refresh check the cell does not have a ship on the script board
+                if (gameboardArray[row][col] !== null) {
+                    cell.classList.add("placed")
+                }
                 boardElement.appendChild(cell);
             }
         }
     },
 
-    setupPlacementPhase() {
+    setupPlacementPhase(player1Gameboard) {
         const placementBoard = document.querySelector("#placement-board")
-        this.renderBoard(placementBoard)
+        this.renderBoard(placementBoard, player1Gameboard.board)
         
         const rotateShipBtn = document.querySelector("#rotate-ship-btn")
             
@@ -70,6 +75,32 @@ export const displayController = {
                 currentCellCol, 
                 currentDirection, 
                 currentShip.length)
+        })
+
+         placementBoard.addEventListener('click', (e) => {
+        
+        // Guard for if not a cell
+            if (!e.target.classList.contains("cell")) return;
+            if (currentShipIndex >= fleetQueue.length) return;
+
+            const currentShip = fleetQueue[currentShipIndex]
+            const shipInstance = createShip(currentShip.shipType)
+
+        // If it works
+            const currentCellRow = Number(e.target.dataset.x)
+            const currentCellCol = Number(e.target.dataset.y)
+        
+            const result = player1Gameboard.placeShip (
+                currentCellRow, 
+                currentCellCol, 
+                shipInstance, 
+                currentDirection 
+            )
+            
+            if (result.success) { 
+                currentShipIndex++ 
+                this.renderBoard(placementBoard, player1Gameboard.board)
+            }
         })
 
         // Rotating a ship with the button
