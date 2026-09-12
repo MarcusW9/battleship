@@ -17,7 +17,7 @@ export const displayController = {
 
         const battleScreen = document.querySelector("#battle-screen")
         const playerTitle = document.querySelector("#player-title")
-
+        
         startForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
@@ -52,6 +52,8 @@ export const displayController = {
     setupPlacementPhase() {
         const placementBoard = document.querySelector("#placement-board")
         this.renderBoard(placementBoard)
+        
+        const rotateShipBtn = document.querySelector("#rotate-ship-btn")
             
         // 1. Event listener to detect a hover on the board
         placementBoard.addEventListener("mouseover",(e) => {
@@ -62,7 +64,18 @@ export const displayController = {
             const currentCellRow = Number(e.target.dataset.x)
             const currentCellCol = Number(e.target.dataset.y)
 
-        })  
+            const currentShip = fleetQueue[currentShipIndex]
+            const currentShipHover = this.getShipCoordinaates(
+                currentCellRow, 
+                currentCellCol, 
+                currentDirection, 
+                currentShip.length)
+        })
+
+        // Rotating a ship with the button
+        rotateShipBtn.addEventListener('click', () => {
+            this.rotateShip()
+        })
     },
 
     getShipCoordinaates(startingRow, startingCol, direction, length) {
@@ -82,5 +95,9 @@ export const displayController = {
             }
         }
         return coordinates
+    },
+
+    rotateShip() {
+        return currentDirection = currentDirection === "horizontal" ? "vertical" : "horizontal"
     }
 }
