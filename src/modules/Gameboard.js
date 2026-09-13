@@ -5,10 +5,11 @@ const createGameboard = () => {
     const trackedHits = new Set()
     const ships = []
     
-    const placeShip = (row, col, ship, direction) => {
 
-        // 1. Guard against invalid ship objects
-        if (!ship || ship.length <= 0) return {
+    const isPlacementValid = (row, col, shipLength, direction) => {
+
+        // 1. Guard against invalid ship length
+        if (!shipLength || shipLength <= 0 || typeof shipLength !== 'number') return {
             success: false,
             status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
             message: 'Invalid ship length of less than 0',
@@ -20,32 +21,50 @@ const createGameboard = () => {
             status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
             message: 'Out of bounds',   
         };
+
         // 3. Direction-specific bounds checking
-        if (col + ship.length > board[0].length && direction === 'horizontal') return {
+        if (col + shipLength > board[0].length && direction === 'horizontal') return {
             success: false,
             status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
             message: 'Out of bounds',   
         };
-        if (row + ship.length > board.length && direction === 'vertical') return {
+        
+        if (row + shipLength > board.length && direction === 'vertical') return {
             success: false,
             status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
             message: 'Out of bounds',   
         };
 
         // 4. Direction-specific ship overlap checking
-        for (let i = 0; i < ship.length; i++) {
-                if (direction === 'horizontal' && board[row][col+i] != null) return {
-                success: false,
-                status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
-                message: 'The chosen position is overlapping another ship',   
-            }; 
-                if (direction === 'vertical' && board[row+i][col] != null) return {
-                success: false,
-                status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
-                message: 'The chosen position is overlapping another ship',
-                };
-            }
-        // 5. Place the ship onto the board
+    for (let i = 0; i < shipLength; i++) {
+            if (direction === 'horizontal' && board[row][col+i] != null) return {
+            success: false,
+            status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
+            message: 'The chosen position is overlapping another ship',   
+        }; 
+            if (direction === 'vertical' && board[row+i][col] != null) return {
+            success: false,
+            status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
+            message: 'The chosen position is overlapping another ship',
+            };
+        }
+
+        return {
+            success: true,
+            status: 'valid', 
+            message: 'The chosen position is valid',
+        };
+    }
+
+
+    const placeShip = (row, col, ship, direction) => {
+
+        // 1. Call helper function to check if the placement is valid
+        const placementCheck = isPlacementValid(row, col, ship.length, direction)
+
+        if (!placementCheck.success) return placementCheck
+
+        // 2. Place the ship onto the board
         for (let i = 0; i < ship.length; i++) {
             if (direction === 'horizontal') {
                 board[row][col+i] = ship
@@ -54,13 +73,13 @@ const createGameboard = () => {
             }
         }
 
-        // 6. Log succesful ship placement and add to total ships
+        // 3. Log succesful ship placement and add to total ships
         ships.push(ship)
         return {
-                success: true,
-                status: 'placed', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
-                message: 'Succesful ship placement',   
-            }; 
+            success: true,
+            status: 'placed', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
+            message: 'Succesful ship placement',   
+        }; 
     }
 
     const automaticallyPlaceShips = () => {
@@ -80,7 +99,7 @@ const createGameboard = () => {
                 }
             }
         
-        for (const shipType of SHIP_PRESETS) {
+        for (const shipType of Object.keys(SHIP_PRESETS)) {
             let didShipPlace = false
 
             // Loop until a succesful placed object is returned
@@ -90,7 +109,12 @@ const createGameboard = () => {
                 const shipTemplate = createShip(shipType)
 
                 // Object is returned with a 'Success : true /false'
-                const placeShipReturnObject = placeShip(generateRandomRow(), generateRandomCol(), shipTemplate, generateRandomDirection())
+                const placeShipReturnObject = placeShip(
+                    generateRandomRow(), 
+                    generateRandomCol(), 
+                    shipTemplate, 
+                    generateRandomDirection()
+                )
                 didShipPlace = placeShipReturnObject.success
             }
         }
@@ -162,7 +186,9 @@ const createGameboard = () => {
     
     return {
         board,
+        isPlacementValid,
         placeShip,
+        automaticallyPlaceShips,
         receiveAttack,
         allShipsSunk
     };
