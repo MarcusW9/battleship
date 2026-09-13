@@ -59,25 +59,61 @@ export const displayController = {
         this.renderBoard(placementBoard, player1Gameboard.board)
         
         const rotateShipBtn = document.querySelector("#rotate-ship-btn")
+
+        placementBoard.addEventListener("mouseleave", (e) => {
+            this.clearHover(placementBoard)
+        })
             
         // 1. Event listener to detect a hover on the board
         placementBoard.addEventListener("mouseover",(e) => {
             
             // Guard for if not a cell
             if (!e.target.classList.contains("cell")) return;
+            // Guard for it all ships already placed
+            if (currentShipIndex >= fleetQueue.length) return
+
+            // Clear from any previous hovers 
+            this.clearHover(placementBoard)
             
             const currentCellRow = Number(e.target.dataset.x)
             const currentCellCol = Number(e.target.dataset.y)
 
             const currentShip = fleetQueue[currentShipIndex]
+            
             const currentShipHover = this.getShipCoordinaates(
                 currentCellRow, 
                 currentCellCol, 
                 currentDirection, 
                 currentShip.length)
+
+            const currentHoverValidity = player1Gameboard.isPlacementValid(
+                currentCellRow, 
+                currentCellCol,
+                currentShip.length,
+                currentDirection
+            )
+            
+            for (const coordinates of this.getShipCoordinaates(
+                currentCellRow, 
+                currentCellCol,
+                currentShip.length,
+                currentDirection
+            )) {
+                // 1. Target the cell in this loop
+                const targetCell = document.querySelector(`[data-x="${coordinates.row}"][data-y="${coordinates.col}"]`)
+
+                if (!targetCell) continue
+
+                // 2. If valid add the class
+                if (currentHoverValidity.success) {
+                    targetCell.classList.add("valid-placement")
+                } else if (!currentHoverValidity.success) {
+                    targetCell.classList.add("invalid-placement")
+                }
+            }
         })
 
-         placementBoard.addEventListener('click', (e) => {
+         placementBoard.addEventListener("click", (e) => {
         
         // Guard for if not a cell
             if (!e.target.classList.contains("cell")) return;
@@ -96,7 +132,7 @@ export const displayController = {
                 shipInstance, 
                 currentDirection 
             )
-            
+
             if (result.success) { 
                 currentShipIndex++ 
                 this.renderBoard(placementBoard, player1Gameboard.board)
@@ -104,7 +140,7 @@ export const displayController = {
         })
 
         // Rotating a ship with the button
-        rotateShipBtn.addEventListener('click', () => {
+        rotateShipBtn.addEventListener("click", () => {
             this.rotateShip()
         })
     },
@@ -126,6 +162,12 @@ export const displayController = {
             }
         }
         return coordinates
+    },
+
+    clearHover(boardElement) {
+        boardElement.querySelectorAll('.cell').forEach(cell => {
+            cell.classList.remove("valid-placement", "invalid-placement")
+        })
     },
 
     rotateShip() {
