@@ -1,3 +1,4 @@
+import { createGameboard } from "./Gameboard";
 import { SHIP_PRESETS, createShip } from "./Ship"
 
 const fleetQueue = Object.entries(SHIP_PRESETS).map(([shipType, length]) => ({
@@ -36,7 +37,7 @@ export const displayController = {
         })
     },
 
-    renderBoard(boardElement, gameboardArray) {
+    renderBoard(boardElement, gameboardArray, isPlayerOne = true) {
         boardElement.innerHTML = "";
         for (let row = 0; row < 10; row++) {
             for (let col = 0; col < 10; col++) {
@@ -45,8 +46,11 @@ export const displayController = {
                 cell.dataset.x = row;
                 cell.dataset.y = col;
 
-                // On every refresh check the cell does not have a ship on the script board
-                if (gameboardArray[row][col] !== null) {
+                // Only reveal ship positions if it's the owner viewing their own board
+                // On every refresh check: 
+                // 1. If it is player one or not (so that not all ships are visible to the player)
+                // 2. If the cell has a ship on it in which case it is visible
+                if (isPlayerOne && gameboardArray[row][col] !== null) {
                     cell.classList.add("placed")
                 }
                 boardElement.appendChild(cell);
@@ -136,6 +140,10 @@ export const displayController = {
             if (result.success) { 
                 currentShipIndex++ 
                 this.renderBoard(placementBoard, player1Gameboard.board)
+
+                if (currentShipIndex >= fleetQueue.length) {
+                    this.startBattlePhase(player1Gameboard)
+                }
             }
         })
 
@@ -172,5 +180,25 @@ export const displayController = {
 
     rotateShip() {
         return currentDirection = currentDirection === "horizontal" ? "vertical" : "horizontal"
+    },
+
+    startBattlePhase(player1Gameboard) {
+
+        // 1. Clear the rotate button
+        const rotateBtn = document.querySelector("#rotate-ship-btn")
+        rotateBtn.classList.add("hidden")
+
+
+        // 2. Generate player 2 board (Computer) automatically
+        const player2Gameboard = createGameboard()
+        player2Gameboard.automaticallyPlaceShips()
+
+        // 3. Grab the two battle boards
+        const player1BoardElement = document.querySelector("#player-one-board")
+        const player2BoardElement = document.querySelector("#player-two-board")
+
+        // 4. Render the boards
+        this.renderBoard(player1BoardElement, player1Gameboard.board, true)
+        this.renderBoard(player2BoardElement, player2Gameboard.board, false)
     }
 }
