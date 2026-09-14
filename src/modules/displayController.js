@@ -1,3 +1,4 @@
+import { createGameController } from "./Controller";
 import { createGameboard } from "./Gameboard";
 import { SHIP_PRESETS, createShip } from "./Ship"
 
@@ -6,11 +7,13 @@ const fleetQueue = Object.entries(SHIP_PRESETS).map(([shipType, length]) => ({
         length
     }))
 
+const gameController = createGameController()
+
 let currentShipIndex = 0;
 let currentDirection = "horizontal";
 
 export const displayController = {
-        init(player1Gameboard) {
+        init(gameController) {
    
         const setupScreen = document.querySelector("#setup-screen")
         const startForm = document.querySelector("#start-form")
@@ -33,7 +36,7 @@ export const displayController = {
             playerTitle.textContent = `Awaiting your orders ${admiralName}`
 
             // 4. Setup board
-            this.setupPlacementPhase(player1Gameboard)
+            this.setupPlacementPhase(gameController)
         })
     },
 
@@ -69,9 +72,9 @@ export const displayController = {
         }
     },
 
-    setupPlacementPhase(player1Gameboard) {
+    setupPlacementPhase(gameController) {
         const placementBoard = document.querySelector("#placement-board")
-        this.renderBoard(placementBoard, player1Gameboard.board)
+        this.renderBoard(placementBoard, gameController.player1Gameboard.board)
         
         const rotateShipBtn = document.querySelector("#rotate-ship-btn")
 
@@ -101,7 +104,7 @@ export const displayController = {
                 currentDirection, 
                 currentShip.length)
 
-            const currentHoverValidity = player1Gameboard.isPlacementValid(
+            const currentHoverValidity = gameController.player1Gameboard.isPlacementValid(
                 currentCellRow, 
                 currentCellCol,
                 currentShip.length,
@@ -128,7 +131,7 @@ export const displayController = {
             }
         })
 
-         placementBoard.addEventListener("click", (e) => {
+        placementBoard.addEventListener("click", (e) => {
         
         // Guard for if not a cell
             if (!e.target.classList.contains("cell")) return;
@@ -141,7 +144,7 @@ export const displayController = {
             const currentCellRow = Number(e.target.dataset.x)
             const currentCellCol = Number(e.target.dataset.y)
         
-            const result = player1Gameboard.placeShip (
+            const result = gameController.player1Gameboard.placeShip (
                 currentCellRow, 
                 currentCellCol, 
                 shipInstance, 
@@ -150,10 +153,10 @@ export const displayController = {
 
             if (result.success) { 
                 currentShipIndex++ 
-                this.renderBoard(placementBoard, player1Gameboard.board)
+                this.renderBoard(placementBoard, gameController.player1Gameboard.board)
 
                 if (currentShipIndex >= fleetQueue.length) {
-                    this.startBattlePhase(player1Gameboard)
+                    this.startBattlePhase(gameController)
                 }
             }
         })
@@ -193,7 +196,7 @@ export const displayController = {
         return currentDirection = currentDirection === "horizontal" ? "vertical" : "horizontal"
     },
 
-    startBattlePhase(player1Gameboard) {
+    startBattlePhase(gameController) {
 
         // 1. Clear the rotate button
         const rotateBtn = document.querySelector("#rotate-ship-btn")
@@ -201,15 +204,42 @@ export const displayController = {
 
 
         // 2. Generate player 2 board (Computer) automatically
-        const player2Gameboard = createGameboard()
-        player2Gameboard.automaticallyPlaceShips()
+        gameController.player2Gameboard.automaticallyPlaceShips()
 
         // 3. Grab the two battle boards
         const player1BoardElement = document.querySelector("#player-one-board")
         const player2BoardElement = document.querySelector("#player-two-board")
 
         // 4. Render the boards
-        this.renderBoard(player1BoardElement, player1Gameboard.board, true)
-        this.renderBoard(player2BoardElement, player2Gameboard.board, false)
-    }
+        this.renderBoard(player1BoardElement, gameController.player1Gameboard.board, true)
+        this.renderBoard(player2BoardElement, gameController.player2Gameboard.board, false)
+
+        this.handlePlayerAttack(gameController)
+    },
+
+    handlePlayerAttack() {
+        const player2BoardElement = document.querySelector("#player-two-board")
+
+        player2BoardElement.addEventListener("click", (e) => {
+            // 1. Guard if the target is not a cell
+            if (!e.target.classList.contains("cell")) return;
+
+            const targetCellRow = Number(e.target.dataset.x)
+            const targetCellCol = Number(e.target.dataset.y)
+
+            // 2. Attack the computer board
+            const result = player2Gameboard.receiveAttack(targetCellRow, targetCellCol)
+
+            // 3. If valid attack (not an already attacked cell)
+            if (result.success === true) {
+                this.renderBoard(player2BoardElement, player2Gameboard.board, false)
+
+                // Check if Player 1 won
+                if (player2Gameboard.allShipsSunk()) {
+                    alert("Victory, you have destroyed the enemy fleet!")
+                    return; 
+                }
+            }
+        })
+    },
 }
