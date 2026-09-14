@@ -53,6 +53,17 @@ export const displayController = {
                 if (isPlayerOne && gameboardArray[row][col] !== null) {
                     cell.classList.add("placed")
                 }
+
+                //If it is not player one then it must be player two's board
+                if (gameboardArray[row][col]?.status === "hit") {
+                    cell.classList.add("hit")
+                } else if (gameboardArray[row][col]?.status === "miss") {
+                    cell.classList.add("miss")
+                } else if (gameboardArray[row][col]?.status === "sunk") {
+                    cell.classList.add("sunk")
+                }
+
+
                 boardElement.appendChild(cell);
             }
         }
