@@ -217,29 +217,38 @@ export const displayController = {
         this.handlePlayerAttack(gameController)
     },
 
-    handlePlayerAttack() {
+    handlePlayerAttack(gameController) {
+        const player1BoardElement = document.querySelector("#player-one-board");
         const player2BoardElement = document.querySelector("#player-two-board")
 
         player2BoardElement.addEventListener("click", (e) => {
-            // 1. Guard if the target is not a cell
+
+            // Guard if the target is not a cell
             if (!e.target.classList.contains("cell")) return;
 
             const targetCellRow = Number(e.target.dataset.x)
             const targetCellCol = Number(e.target.dataset.y)
 
-            // 2. Attack the computer board
-            const result = player2Gameboard.receiveAttack(targetCellRow, targetCellCol)
+            // 1. Play human turn
+            const playerTurn = gameController.playTurn(targetCellRow, targetCellCol);
+            if (!playerTurn.success) return;
 
-            // 3. If valid attack (not an already attacked cell)
-            if (result.success === true) {
-                this.renderBoard(player2BoardElement, player2Gameboard.board, false)
+            // Render updated computer board
+            this.renderBoard(player2BoardElement, gameController.player2Gameboard.board, false);
 
-                // Check if Player 1 won
-                if (player2Gameboard.allShipsSunk()) {
-                    alert("Victory, you have destroyed the enemy fleet!")
-                    return; 
-                }
+            if (playerTurn.status === "win") {
+                alert(playerTurn.message);
+                return;
+            }
+            // 2. Play computer turn automatically
+            const computerTurn = gameController.automaticComputerMove();
+
+            // Render updated human board
+            this.renderBoard(player1BoardElement, gameController.player1Gameboard.board, true);
+
+            if (computerTurn?.status === "win") {
+                alert(computerTurn.message);
             }
         })
-    },
+    }
 }
