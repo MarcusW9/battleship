@@ -38,7 +38,7 @@ export const displayController = {
         })
     },
 
-    renderBoard(boardElement, gameboardArray, isPlayerOne = true) {
+    renderBoard(boardElement, gameboard, isPlayerOne = true) {
         boardElement.innerHTML = "";
         for (let row = 0; row < 10; row++) {
             for (let col = 0; col < 10; col++) {
@@ -51,16 +51,16 @@ export const displayController = {
                 // On every refresh check: 
                 // 1. If it is player one or not (so that not all ships are visible to the player)
                 // 2. If the cell has a ship on it in which case it is visible
-                if (isPlayerOne && gameboardArray[row][col] !== null) {
+                if (isPlayerOne && gameboard.board[row][col] !== null) {
                     cell.classList.add("placed")
                 }
 
                 //If it is not player one then it must be player two's board
-                if (gameboardArray[row][col]?.status === "hit") {
+                if (gameboard.getAttackStatus(row, col) === "hit") {
                     cell.classList.add("hit")
-                } else if (gameboardArray[row][col]?.status === "miss") {
+                } else if (gameboard.getAttackStatus(row, col) === "miss") {
                     cell.classList.add("miss")
-                } else if (gameboardArray[row][col]?.status === "sunk") {
+                } else if (gameboard.board[row][col]?.status === "sunk") { // NEED TO REFACTOR SUNK LOGIC ON SHIP
                     cell.classList.add("sunk")
                 }
 
