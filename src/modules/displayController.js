@@ -7,8 +7,6 @@ const fleetQueue = Object.entries(SHIP_PRESETS).map(([shipType, length]) => ({
         length
     }))
 
-const gameController = createGameController()
-
 let currentShipIndex = 0;
 let currentDirection = "horizontal";
 

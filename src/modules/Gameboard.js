@@ -2,9 +2,8 @@ import { createShip, SHIP_PRESETS } from "./Ship.js"
 
 const createGameboard = () => {
     const board = Array(10).fill(null).map(() => Array(10).fill(null));
-    const trackedHits = new Set()
     const ships = []
-    
+    const trackedAttacks = new Map()
 
     const isPlacementValid = (row, col, shipLength, direction) => {
 
@@ -130,7 +129,7 @@ const createGameboard = () => {
             }
 
         // 2. Guard for if hit already placed on the cell
-        if (trackedHits.has(`${row},${col}`)) return { 
+        if (trackedAttacks.has(`${row},${col}`)) return { 
                 success: false,
                 status: 'invalid', 
                 message: 'We have already attacked this location',
@@ -139,7 +138,7 @@ const createGameboard = () => {
 
         // 3. Check for no ship trigger hit and return miss
         if (board[row][col] === null) {
-            trackedHits.add(`${row},${col}`)
+            trackedAttacks.set(`${row},${col}`, 'miss')
             return { 
                 success: true,
                 status: 'miss', 
@@ -149,7 +148,7 @@ const createGameboard = () => {
         }
         // 4. Trigger a hit on the coordinate if there is a ship
         board[row][col].hit()
-        trackedHits.add(`${row},${col}`)
+        trackedAttacks.set(`${row},${col}`, 'hit')
 
         // 5. Return sunk if the boat hit is now sunk
         if (board[row][col].isSunk()) {
@@ -183,6 +182,8 @@ const createGameboard = () => {
         // 4. if all ships are sunk the loop finishes and returns true
         return true
     }
+
+    const getAttackStatus = (row, col) => trackedAttacks.get(`${row},${col}`) || null
     
     return {
         board,
@@ -190,6 +191,7 @@ const createGameboard = () => {
         placeShip,
         automaticallyPlaceShips,
         receiveAttack,
+        getAttackStatus,
         allShipsSunk
     };
 };
