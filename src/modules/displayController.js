@@ -18,7 +18,10 @@ export const displayController = {
         const playerInputName = document.querySelector("#player-name")
 
         const battleScreen = document.querySelector("#battle-screen")
-        const playerTitle = document.querySelector("#player-title")
+
+        const headerTitle = document.querySelector("#header-title")
+        const headerText = document.querySelector("#header-text")
+
         
         startForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -29,9 +32,10 @@ export const displayController = {
             // 2. Switch screens
             setupScreen.classList.add("hidden");
             battleScreen.classList.remove("hidden")
+            headerTitle.classList.add("hidden") 
 
             // 3. Assign correct name to UI 
-            playerTitle.textContent = `Awaiting your orders ${admiralName}`
+            headerText.textContent = `Admiral ${admiralName}, your ships await your orders!`
 
             // 4. Setup board
             this.setupPlacementPhase(gameController)
