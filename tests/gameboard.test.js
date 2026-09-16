@@ -57,3 +57,37 @@ test('hit ship and return true to detect a hit on ship', () => {
     expect(gameboard.receiveAttack(1, 1).status).toBe('hit')
 })
 
+test('returns "hit" status for an attacked cell containing a ship', () => {
+    const gameboard = createGameboard()
+    const ship = createShip('Cruiser') 
+    gameboard.placeShip(1, 1, ship,'horizontal')
+
+    // A hit on the cruiser
+    expect(gameboard.receiveAttack(1, 1).status).toBe('hit')
+    expect(gameboard.getAttackStatus(1, 1)).toBe('hit')
+})
+
+test('returns "miss" status for an attacked empty cell', () => {
+    const gameboard = createGameboard()
+    const ship = createShip('Cruiser') 
+    gameboard.placeShip(1, 1, ship,'horizontal')
+
+    // A miss on the cruiser
+    expect(gameboard.receiveAttack(5, 1).status).toBe('miss')
+    expect(gameboard.getAttackStatus(5, 1)).toBe('miss')
+})
+
+test('confirms ship model evaluates isSunk as true when all segments are hit', () => {
+    const gameboard = createGameboard()
+    const ship = createShip('Cruiser') 
+    gameboard.placeShip(1, 1, ship,'horizontal')
+
+    // A hit on the cruiser (length 1/3)
+    expect(gameboard.receiveAttack(1, 1).status).toBe('hit')
+    // A hit on the cruiser (length 2/3)
+    expect(gameboard.receiveAttack(1, 2).status).toBe('hit')
+     // A sunk on the cruiser (length 3/3)
+    expect(gameboard.receiveAttack(1, 3).status).toBe('sunk')
+
+    expect(gameboard.board[1][1].isSunk()).toBe(true)
+})
