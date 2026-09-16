@@ -1,6 +1,6 @@
-import { createGameController } from "./Controller";
-import { createGameboard } from "./Gameboard";
-import { SHIP_PRESETS, createShip } from "./Ship"
+import { createGameController } from "./Controller.js";
+import { createGameboard } from "./Gameboard.js";
+import { SHIP_PRESETS, createShip } from "./Ship.js"
 
 const fleetQueue = Object.entries(SHIP_PRESETS).map(([shipType, length]) => ({
         shipType,

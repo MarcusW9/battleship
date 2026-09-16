@@ -1,5 +1,5 @@
-import { createGameboard } from "./Gameboard"
-import { createPlayer } from "./Player"
+import { createGameboard } from "./Gameboard.js"
+import { createPlayer } from "./Player.js"
 
 export const createGameController = (
     player1Name = 'You', 
