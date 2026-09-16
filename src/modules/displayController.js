@@ -47,24 +47,25 @@ export const displayController = {
                 cell.dataset.x = row;
                 cell.dataset.y = col;
 
+                const isShip = gameboard.board[row][col]
+                const attackStatus = gameboard.getAttackStatus(row, col)
+
                 // Only reveal ship positions if it's the owner viewing their own board
                 // On every refresh check: 
                 // 1. If it is player one or not (so that not all ships are visible to the player)
                 // 2. If the cell has a ship on it in which case it is visible
-                if (isPlayerOne && gameboard.board[row][col] !== null) {
+                if (isPlayerOne && isShip !== null) {
                     cell.classList.add("placed")
                 }
 
                 //If it is not player one then it must be player two's board
-                if (gameboard.getAttackStatus(row, col) === "hit") {
-                    cell.classList.add("hit")
-                } else if (gameboard.getAttackStatus(row, col) === "miss") {
+                if (attackStatus === "miss") {
                     cell.classList.add("miss")
-                } else if (gameboard.board[row][col]?.status === "sunk") { // NEED TO REFACTOR SUNK LOGIC ON SHIP
-                    cell.classList.add("sunk")
+                } else if (attackStatus === "hit") {
+                        if (isShip && isShip.isSunk()) { 
+                        cell.classList.add("sunk")
+                    } else {cell.classList.add("hit")}
                 }
-
-
                 boardElement.appendChild(cell);
             }
         }
@@ -72,7 +73,7 @@ export const displayController = {
 
     setupPlacementPhase(gameController) {
         const placementBoard = document.querySelector("#placement-board")
-        this.renderBoard(placementBoard, gameController.player1Gameboard.board)
+        this.renderBoard(placementBoard, gameController.player1Gameboard)
         
         const rotateShipBtn = document.querySelector("#rotate-ship-btn")
 
@@ -151,7 +152,7 @@ export const displayController = {
 
             if (result.success) { 
                 currentShipIndex++ 
-                this.renderBoard(placementBoard, gameController.player1Gameboard.board)
+                this.renderBoard(placementBoard, gameController.player1Gameboard)
 
                 if (currentShipIndex >= fleetQueue.length) {
                     this.startBattlePhase(gameController)
@@ -209,8 +210,8 @@ export const displayController = {
         const player2BoardElement = document.querySelector("#player-two-board")
 
         // 4. Render the boards
-        this.renderBoard(player1BoardElement, gameController.player1Gameboard.board, true)
-        this.renderBoard(player2BoardElement, gameController.player2Gameboard.board, false)
+        this.renderBoard(player1BoardElement, gameController.player1Gameboard, true)
+        this.renderBoard(player2BoardElement, gameController.player2Gameboard, false)
 
         this.handlePlayerAttack(gameController)
     },
@@ -232,7 +233,7 @@ export const displayController = {
             if (!playerTurn.success) return;
 
             // Render updated computer board
-            this.renderBoard(player2BoardElement, gameController.player2Gameboard.board, false);
+            this.renderBoard(player2BoardElement, gameController.player2Gameboard, false);
 
             if (playerTurn.status === "win") {
                 alert(playerTurn.message);
@@ -242,7 +243,7 @@ export const displayController = {
             const computerTurn = gameController.automaticComputerMove();
 
             // Render updated human board
-            this.renderBoard(player1BoardElement, gameController.player1Gameboard.board, true);
+            this.renderBoard(player1BoardElement, gameController.player1Gameboard, true);
 
             if (computerTurn?.status === "win") {
                 alert(computerTurn.message);
