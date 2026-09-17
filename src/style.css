@@ -209,6 +209,26 @@ header > p {
     border-radius: 14px;
 }
 
+/* ==========================================
+   COMBAT PHASE
+   ========================================== */
 
+#player-one-board {
+    width: var(--board-size);
+    aspect-ratio: 1 / 1; /* Guarantees 1:1 height-to-width ratio */
+    background-color: red;
+    
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+}
 
-   
+#player-two-board {
+    width: var(--board-size);
+    aspect-ratio: 1 / 1; /* Guarantees 1:1 height-to-width ratio */
+    background-color: red;
+    
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+}

@@ -80,6 +80,7 @@ export const displayController = {
         this.renderBoard(placementBoard, gameController.player1Gameboard)
         
         const rotateShipBtn = document.querySelector("#rotate-ship-btn")
+        const startBtn = document.querySelector("#start-battle-btn")
 
         placementBoard.addEventListener("mouseleave", (e) => {
             this.clearHover(placementBoard)
@@ -154,7 +155,14 @@ export const displayController = {
                 this.renderBoard(placementBoard, gameController.player1Gameboard)
 
                 if (currentShipIndex >= fleetQueue.length) {
-                    this.startBattlePhase(gameController)
+                    // 1. Clear rotate button
+                    const rotateBtn = document.querySelector("#rotate-ship-btn")
+                    rotateBtn.classList.add("hidden")
+
+                    //2. 
+                    startBtn.addEventListener("click", () => {
+                        this.startBattlePhase(gameController)
+                    })
                 }
             }
         })
@@ -196,21 +204,23 @@ export const displayController = {
 
     startBattlePhase(gameController) {
 
-        // 1. Clear the rotate button
-        const rotateBtn = document.querySelector("#rotate-ship-btn")
-        rotateBtn.classList.add("hidden")
+        const placementBoard = document.querySelector("#placement-container")
+        const combatContainer = document.querySelector("#combat-container")
 
-
-        // 2. Generate player 2 board (Computer) automatically
+        // 1. Generate player 2 board (Computer) automatically
         gameController.player2Gameboard.automaticallyPlaceShips()
 
-        // 3. Grab the two battle boards
+        // 2. Grab the two battle boards
         const player1BoardElement = document.querySelector("#player-one-board")
         const player2BoardElement = document.querySelector("#player-two-board")
 
-        // 4. Render the boards
+        // 3. Render the boards and generate combat view
         this.renderBoard(player1BoardElement, gameController.player1Gameboard, true)
         this.renderBoard(player2BoardElement, gameController.player2Gameboard, false)
+        combatContainer.classList.remove("hidden")
+
+        // 4. Change DOM
+        placementBoard.classList.add("hidden")
 
         this.handlePlayerAttack(gameController)
     },
