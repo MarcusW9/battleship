@@ -1,30 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
+
 :root {
-      --bg-desk: #d3cbbd;
-      --mat-surface: #68839b;
-      --card-bg: #ece7de;
-      --card-border: #dcd4c8;
-      --panel-right-bg: #e6dfd3;
-      --text-dark: #2c3333;
-      --text-muted: #727a80;
-      
-      /* Lofi Palette Accents */
-      --color-ship: #a1bc9b;       /* Muted Sage Green */
-      --color-hit: #f2a68d;        /* Soft Coral / Peach */
-      --color-miss: #d3ccc0;       /* Muted Pebble Dot */
-      --color-accent: #2e3b4e;     /* Deep Navy Header */
-      --btn-bg: #e2dad0;
-      --btn-hover: #d5cac0;
-    }
+  --bg-main: #d8d0c5;
+  --mat-surface: #68839b;
+  --card-bg: #eae3d9;
+  --card-border: #d2c8bc;
+  --panel-bg: #ece6dd;
+  --text-dark: #2d3338;
+  --text-muted: #78828a;
+  
+  /* Modern States Palette */
+  --color-grid-bg: #f4efea;
+  --color-border: #ded7ce;
+  --color-ship: #a1bc9b;       /* Soft Sage Green */
+  --color-hit: #f2a68d;        /* Muted Coral / Peach */
+  --color-miss: #cbc4b8;       /* Muted Pebble */
+  --color-accent: #334155;     /* Slate Dark Accent */
+  
+  /* Buttons & Inputs */
+  --btn-bg: #f5f0eb;
+  --btn-hover: #e5dec9;
+  --btn-border: #ccc3b8;
+  --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+* {
+  box-sizing: border-box; /* Changes how the browser calculates element sizes. 
+  Instead of adding padding and border on top of an element's width and height, 
+  includes them inside the declared dimensions. */
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
 
 body {
-    background-color: #DBDBDB;
-    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    min-height: 100vh;
+    background-color: var(--bg-main);
+    color: var(--text-dark);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;    min-height: 100vh;
     width: 100vw;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
 }
 
 header {
@@ -48,7 +64,6 @@ header > p {
     font-size: 18px;
 }
 
-
 .hidden {
     display:none !important; /* Need to make it important to override overrules */
 }
@@ -62,26 +77,34 @@ header > p {
 }
 
 #form-image {
-    margin: 0;
-    padding: 0;
-    z-index: -1;
-    position: absolute;
-    object-fit: cover;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  margin: 0;
+  padding: 0;
+  z-index: -1;
+  position: absolute;
+  object-fit: cover;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.15; /* Softened background for lofi aesthetic */
+  filter: grayscale(40%);
 }
 
 #start-form {
   display: grid;
   /* Column 1 auto-fits label text; Column 2 takes remaining space */
   grid-template-columns: auto 1fr; 
-  gap: 1rem;            /* Spacing between all grid items */
+  gap: 1.5rem;            /* Spacing between all grid items */
   align-items: center;  
-  width: 50%;
-  max-width: 75%;    /* Prevents form from stretching too wide */
+  width: 90%;
+  max-width: 800px;    /* Prevents form from stretching too wide */
   margin: 0 auto;       /* Centers form box horizontally */
+
+  background: var(--panel-bg);
+  border: 1px solid var(--card-border);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
 }
 
 #start-form > label {
@@ -138,25 +161,11 @@ header > p {
 }
 
 /* ==========================================
-    CONTAINERS
-   ========================================== */
-   
-#battle-screen {
-    flex: 1;
-    display: flex;
-}
-
-#game-container {
-    background-color: var(--bg-desk);
-    width: 100vw;
-    flex: 1; /* Takes up ALL remaining vertical space below header */
-}
-
-/* ==========================================
    PLACEMENT BOARD
    ========================================== */
    
 #placement-container {
+    --board-size: min(60vh, 80vw);
     background-color: var(--color-accent);
     width: 100%;
     display: flex;
@@ -164,14 +173,12 @@ header > p {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    --board-size: min(60vh, 80vw);
     margin: 0 auto; 
 }
 
 #placement-board {
     width: var(--board-size);
     aspect-ratio: 1 / 1; /* Guarantees 1:1 height-to-width ratio */
-    background-color: red;
     
     display: grid;
     grid-template-columns: repeat(10, 1fr);
@@ -212,12 +219,33 @@ header > p {
 /* ==========================================
    COMBAT PHASE
    ========================================== */
+   
+#battle-screen {
+    flex: 1; /* Takes up ALL remaining vertical space below header */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+#game-container {
+    background-color: var(--bg-main);
+    width: 100vw;
+    flex: 1; /* Takes up ALL remaining vertical space below header */
+    flex-direction: column;
+}
+
+#combat-container {
+    --board-size: min(60vw, 80vh);
+    display: flex;
+    flex: 1;
+    justify-content: space-evenly;
+}
 
 #player-one-board {
     width: var(--board-size);
     aspect-ratio: 1 / 1; /* Guarantees 1:1 height-to-width ratio */
-    background-color: red;
-    
+
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
@@ -226,7 +254,6 @@ header > p {
 #player-two-board {
     width: var(--board-size);
     aspect-ratio: 1 / 1; /* Guarantees 1:1 height-to-width ratio */
-    background-color: red;
     
     display: grid;
     grid-template-columns: repeat(10, 1fr);
