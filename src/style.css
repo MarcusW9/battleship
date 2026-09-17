@@ -1,3 +1,21 @@
+:root {
+      --bg-desk: #d3cbbd;
+      --mat-surface: #68839b;
+      --card-bg: #ece7de;
+      --card-border: #dcd4c8;
+      --panel-right-bg: #e6dfd3;
+      --text-dark: #2c3333;
+      --text-muted: #727a80;
+      
+      /* Lofi Palette Accents */
+      --color-ship: #a1bc9b;       /* Muted Sage Green */
+      --color-hit: #f2a68d;        /* Soft Coral / Peach */
+      --color-miss: #d3ccc0;       /* Muted Pebble Dot */
+      --color-accent: #2e3b4e;     /* Deep Navy Header */
+      --btn-bg: #e2dad0;
+      --btn-hover: #d5cac0;
+    }
+
 body {
     background-color: #DBDBDB;
     font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
@@ -119,50 +137,75 @@ header > p {
     }
 }
 
+/* ==========================================
+    CONTAINERS
+   ========================================== */
+   
+#battle-screen {
+    flex: 1;
+    display: flex;
+}
+
+#game-container {
+    background-color: var(--bg-desk);
+    width: 100vw;
+    flex: 1; /* Takes up ALL remaining vertical space below header */
+}
 
 /* ==========================================
    PLACEMENT BOARD
    ========================================== */
-
+   
 #placement-container {
-    background-color: red;
+    background-color: var(--color-accent);
     width: 100%;
-    height: 100%; 
     display: flex;
+    flex: 1;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    --board-size: min(60vh, 80vw);
+    margin: 0 auto; 
 }
 
 #placement-board {
+    width: var(--board-size);
+    aspect-ratio: 1 / 1; /* Guarantees 1:1 height-to-width ratio */
     background-color: red;
-    width: 1000px;
-    height: 1000px; 
+    
     display: grid;
-    grid-template-columns: repeat(10, 1fr)
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
 }
 
 .cell {
     background-color: blue;
-    border: 1px, dotted, black 
+    border: 1px, dotted, black;
 }
 
+.cell.valid-placement {
+    background-color: var(--card-bg, #22c55e); 
+    cursor: pointer;
+}
+
+.cell.invalid-placement {
+    background-color: #ef4444; /* Red fallback */
+    cursor: not-allowed;
+}
+
+
 #rotate-ship-btn {
-    width: 1000px
+    width: var(--board-size); /* Matches the board exactly */
+    padding: 0.75rem;
+    border-radius: 14px;
 }
 
 #start-battle-btn {
-    width: 1000px
+    width: var(--board-size); /* Matches the board exactly */
+    padding: 0.75rem;
+    border-radius: 14px;
 }
 
-/* ==========================================
-   GAME CONTAINER
-   ========================================== */
 
-   #game-container {
-    background-color: red;
-    width: 100vw;
-    height: 100vh; 
-    flex: 1; /* Takes up ALL remaining vertical space below header */
 
-}
+   
