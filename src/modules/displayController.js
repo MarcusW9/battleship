@@ -101,11 +101,11 @@ export const displayController = {
 
             const currentShip = fleetQueue[currentShipIndex]
             
-            const currentShipHover = this.getShipCoordinaates(
+            const currentShipHover = this.getShipCoordinates(
                 currentCellRow, 
-                currentCellCol, 
-                currentDirection, 
-                currentShip.length)
+                currentCellCol,  
+                currentShip.length,
+                currentDirection)
 
             const currentHoverValidity = gameController.player1Gameboard.isPlacementValid(
                 currentCellRow, 
@@ -114,12 +114,7 @@ export const displayController = {
                 currentDirection
             )
             
-            for (const coordinates of this.getShipCoordinaates(
-                currentCellRow, 
-                currentCellCol,
-                currentShip.length,
-                currentDirection
-            )) {
+            for (const coordinates of currentShipHover) {
                 // 1. Target the cell in this loop
                 const targetCell = document.querySelector(`[data-x="${coordinates.row}"][data-y="${coordinates.col}"]`)
 
@@ -170,7 +165,7 @@ export const displayController = {
         })
     },
 
-    getShipCoordinaates(startingRow, startingCol, direction, length) {
+    getShipCoordinates(startingRow, startingCol, length, direction) {
         const coordinates = []
         for (let i = 0; i < length; i++) {
             if (direction === "horizontal") {
