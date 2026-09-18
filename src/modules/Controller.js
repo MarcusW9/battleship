@@ -31,7 +31,7 @@ export const createGameController = (
         
         // 3. If attack returned false (e.g., cell [row, col] was already shot),
         // stop here so player can try a different cell
-        if (!activeTurn) return {
+        if (!activeTurn.success) return {
             success: false,
             status: 'invalid', // Options: 'miss' | 'hit' | 'sunk' | 'placed' | 'invalid'
             message: 'You have already fired at this coordinate!'

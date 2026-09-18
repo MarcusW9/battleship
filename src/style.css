@@ -12,9 +12,10 @@
   /* Modern States Palette */
   --color-grid-bg: #f4efea;
   --color-border: #ded7ce;
-  --color-ship: #a1bc9b;       /* Soft Sage Green */
+  --color-ship: #6b7c85;       /* Soft Sage Green */
   --color-hit: #f2a68d;        /* Muted Coral / Peach */
-  --color-miss: #cbc4b8;       /* Muted Pebble */
+  --color-sunk: #a1bc9b;
+  --color-miss: #cbc4b8;         /* Muted Pebble */
   --color-accent: #334155;     /* Slate Dark Accent */
   
   /* Buttons & Inputs */
@@ -258,4 +259,16 @@ header > p {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
+}
+
+.hit {
+    background-color: var(--color-hit);
+}
+
+.miss {
+    background-color: var(--color-miss);
+}
+
+.sunk {
+    background-color: var(--color-sunk)
 }
