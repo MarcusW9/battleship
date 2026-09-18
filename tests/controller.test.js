@@ -66,3 +66,20 @@ test('Computer automatically plays move when its their turn', () => {
     expect(gameController.activePlayer.playerName).toBe("TestName");
 })
 
+test('Cannot trigger play turn on the same cell', () => {
+    // 1.Create a controller with two players one human one ai
+    const gameController = createGameController('TestName')
+
+    // 2. Human plays turn and this should trigger switch to Computer
+    expect(gameController.playTurn(1, 1).success).toBe(true)
+
+    // 3. Computer takes turn
+    gameController.automaticComputerMove();
+    
+    // 4. Return false as playTurn cannot be on the same cell
+    expect(gameController.playTurn(1, 1).success).toBe(false)
+
+    // 5. Confirm still player turn and attack on another cell can work
+    expect(gameController.activePlayer.playerName).toBe("TestName");
+    expect(gameController.playTurn(1, 2).success).toBe(true)
+})

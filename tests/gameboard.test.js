@@ -91,3 +91,4 @@ test('confirms ship model evaluates isSunk as true when all segments are hit', (
 
     expect(gameboard.board[1][1].isSunk()).toBe(true)
 })
+
