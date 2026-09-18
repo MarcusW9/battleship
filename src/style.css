@@ -69,6 +69,10 @@ header > p {
     display:none !important; /* Need to make it important to override overrules */
 }
 
+/* ==========================================
+   SETUP SCREEN
+   ========================================== */
+
 #setup-screen {
     flex: 1; /* Takes up ALL remaining vertical space below header */
     display: flex;
@@ -109,24 +113,49 @@ header > p {
 }
 
 #start-form > label {
-    font-size: 24px;
+    color: var(--text-dark);
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
 #start-form > input {
-    font-size: 18px;
-    width: auto;
-    height: 2em;
+    background-color: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    color: var(--text-dark);
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
+    outline: none;
 }
 
+#start-form > input:focus {
+    border-color: var(--mat-surface);
+    box-shadow: 0 0 0 3px rgba(104, 131, 155, 0.15);
+}
 
 #start-form button {
-  grid-column: 1 / -1;  /* Spans from column line 1 to the end */
-  margin-top: 0.5rem;   /* Optional extra space above button */
-  padding: 0.75rem;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-  font-size: 28px;
+    background-color: var(--color-accent);
+    border: none;
+    border-radius: 10px;
+    box-shadow: var(--shadow-soft);
+    color: #fff;
+    cursor: pointer;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 28px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 1rem;
+    grid-column: 1 / -1;  /* Spans from column line 1 to the end */
+    letter-spacing: 0.5px;
+    margin-top: 0.5rem;   /* Optional extra space above button */
+    padding: 0.85rem;
 }
 
+#start-form button:hover {
+  background-color: #232d3d;
+  transform: translateY(-1px);
+}
 
 /* ==========================================
    MOBILE STYLES (Applies to screens ≤ 600px)
@@ -159,6 +188,29 @@ header > p {
     #start-form button {
         font-size: 22px;
     }
+}
+
+/* ==========================================
+   CONTAINERS
+   ========================================== */
+
+#battle-screen {
+    align-items: center;
+    display: flex;
+    flex: 1; /* Takes up ALL remaining vertical space below header */
+    justify-content: center;
+    padding: 1.5rem 1rem 3rem;
+    width: 100%;
+}
+
+#game-container {
+    background-color: var(--bg-main);
+    display: flex;
+    flex: 1; /* Takes up ALL remaining vertical space below header */
+    flex-direction: column;
+    justify-content: center;
+    max-width: 1100px;
+    width: 100vw;  
 }
 
 /* ==========================================
@@ -220,21 +272,6 @@ header > p {
 /* ==========================================
    COMBAT PHASE
    ========================================== */
-   
-#battle-screen {
-    flex: 1; /* Takes up ALL remaining vertical space below header */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-}
-
-#game-container {
-    background-color: var(--bg-main);
-    width: 100vw;
-    flex: 1; /* Takes up ALL remaining vertical space below header */
-    flex-direction: column;
-}
 
 #combat-container {
     --board-size: min(60vw, 80vh);
