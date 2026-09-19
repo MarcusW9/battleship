@@ -247,6 +247,7 @@ export const displayController = {
             this.renderBoard(player2BoardElement, gameController.player2Gameboard, false);
 
             if (playerTurn.status === "win") {
+                this.winGame()
                 alert(playerTurn.message);
                 return;
             }
@@ -257,9 +258,15 @@ export const displayController = {
             this.renderBoard(player1BoardElement, gameController.player1Gameboard, true);
 
             if (computerTurn?.status === "win") {
+                this.winGame()
                 alert(computerTurn.message);
             }
         })
+    },
+
+    winGame() {
+        const resetBtn = document.getElementById("reset-game-btn")
+        resetBtn.classList.remove("hidden")
     },
 
     resetBoardElement() {
@@ -283,12 +290,14 @@ export const displayController = {
     },
 
     resetGame(gameController) {
-        const { placementContainer, player2Gameboard } = this.resetBoardElement()
+        const { placementContainer, player2Board } = this.resetBoardElement()
         const combatContainer = document.querySelector("#combat-container")
         const placementBoard = placementContainer.querySelector("#placement-board")
+        const resetBtn = document.getElementById("reset-game-btn")
 
         combatContainer.classList.add("hidden")
         placementContainer.classList.remove("hidden")
+        resetBtn.classList.add("hidden")
         
         currentShipIndex = 0
         currentDirection = "horizontal"

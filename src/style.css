@@ -259,7 +259,7 @@ header > p {
     background-color: var(--color-ship);
 }
 
-#rotate-ship-btn, #start-battle-btn {
+#rotate-ship-btn, #start-battle-btn, #reset-game-btn {
   width: var(--board-size);
   padding: 0.75rem;
   font-family: inherit;
@@ -291,7 +291,8 @@ header > p {
    ========================================== */
 
 #combat-container {
-    --board-size: min(380px, 40vw);    display: flex;
+    --board-size: min(380px, 40vw);    
+    display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
@@ -329,6 +330,19 @@ header > p {
 
 .sunk {
     background-color: var(--color-sunk)
+}
+
+#reset-game-btn {
+    width: var(--board-size);
+    padding: 0.75rem;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    background-color: var(--btn-bg);
+    border: 1px solid var(--btn-border);
+    border-radius: 12px;
+    cursor: pointer;
 }
 
 /* ==========================================
