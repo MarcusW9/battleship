@@ -22,6 +22,7 @@ export const displayController = {
         const headerTitle = document.querySelector("#header-title")
         const headerText = document.querySelector("#header-text")
 
+        const startingPlacementBoard = document.querySelector("#placement-board")
         
         startForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -38,7 +39,7 @@ export const displayController = {
             headerText.textContent = `Admiral ${admiralName}, your ships await your orders!`
 
             // 4. Setup board
-            this.setupPlacementPhase(gameController)
+            this.setupPlacementPhase(gameController, startingPlacementBoard)
         })
     },
 
@@ -75,12 +76,15 @@ export const displayController = {
         }
     },
 
-    setupPlacementPhase(gameController) {
-        const placementBoard = document.querySelector("#placement-board")
+    setupPlacementPhase(gameController, placementBoardElement) {
+        const placementBoard = placementBoardElement
         this.renderBoard(placementBoard, gameController.player1Gameboard)
         
         const rotateShipBtn = document.querySelector("#rotate-ship-btn")
         const startBtn = document.querySelector("#start-battle-btn")
+
+        // Ensure the button is being rendered if it might have been hidden from previous round
+        rotateShipBtn.classList.remove("hidden")
 
         placementBoard.addEventListener("mouseleave", (e) => {
             this.clearHover(placementBoard)
@@ -222,12 +226,10 @@ export const displayController = {
         // 4. Change DOM
         placementBoard.classList.add("hidden")
 
-        this.handlePlayerAttack(gameController)
+        this.handlePlayerAttack(gameController, player1BoardElement, player2BoardElement)
     },
 
-    handlePlayerAttack(gameController) {
-        const player1BoardElement = document.querySelector("#player-one-board");
-        const player2BoardElement = document.querySelector("#player-two-board")
+    handlePlayerAttack(gameController, player1BoardElement, player2BoardElement) {
 
         player2BoardElement.addEventListener("click", (e) => {
 
@@ -258,5 +260,39 @@ export const displayController = {
                 alert(computerTurn.message);
             }
         })
+    },
+
+    resetBoardElement() {
+
+        // 1. Grab existing board (board one has no listeners)
+        const oldPlacementContainer = document.querySelector("#placement-container")
+        const oldPlayer2Board = document.querySelector("#player-two-board")
+
+        // 2. Clone them to a variable
+        const newPlacementContainer = oldPlacementContainer.cloneNode(true)
+        const newPlayer2Board = oldPlayer2Board.cloneNode(true)
+
+        // 3. Swap old board for new board by pointing at parent
+        oldPlacementContainer.parentNode.replaceChild(newPlacementContainer, oldPlacementContainer)
+        oldPlayer2Board.parentNode.replaceChild(newPlayer2Board, oldPlayer2Board)
+
+        return { 
+            placementContainer : newPlacementContainer,
+            player2Board : newPlayer2Board
+        }
+    },
+
+    resetGame(gameController) {
+        const { placementContainer, player2Gameboard } = this.resetBoardElement()
+        const combatContainer = document.querySelector("#combat-container")
+        const placementBoard = placementContainer.querySelector("#placement-board")
+
+        combatContainer.classList.add("hidden")
+        placementContainer.classList.remove("hidden")
+        
+        currentShipIndex = 0
+        currentDirection = "horizontal"
+
+        this.setupPlacementPhase(gameController, placementBoard)
     }
 }
