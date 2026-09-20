@@ -229,7 +229,11 @@ export const displayController = {
 
     handlePlayerAttack(gameController, player1BoardElement, player2BoardElement) {
 
+        let gameOver = false;
+
         player2BoardElement.addEventListener("click", (e) => {
+
+            if (gameOver) return
 
             // Guard if the target is not a cell
             if (!e.target.classList.contains("cell")) return;
@@ -245,6 +249,7 @@ export const displayController = {
             this.renderBoard(player2BoardElement, gameController.player2Gameboard, false);
 
             if (playerTurn.status === "win") {
+                gameOver = true
                 this.winGame(playerTurn.data.winner.playerName)
                 return;
             }
@@ -255,6 +260,7 @@ export const displayController = {
             this.renderBoard(player1BoardElement, gameController.player1Gameboard, true);
 
             if (computerTurn?.status === "win") {
+                gameOver = true
                 this.winGame(computerTurn.data.winner.playerName)
             }
         })
