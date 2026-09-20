@@ -245,8 +245,7 @@ export const displayController = {
             this.renderBoard(player2BoardElement, gameController.player2Gameboard, false);
 
             if (playerTurn.status === "win") {
-                this.winGame()
-                alert(playerTurn.message);
+                this.winGame(playerTurn.data.winner.playerName)
                 return;
             }
             // 2. Play computer turn automatically
@@ -256,15 +255,18 @@ export const displayController = {
             this.renderBoard(player1BoardElement, gameController.player1Gameboard, true);
 
             if (computerTurn?.status === "win") {
-                this.winGame()
-                alert(computerTurn.message);
+                this.winGame(computerTurn.data.winner.playerName)
             }
         })
     },
 
-    winGame() {
+    winGame(winnerName) {
         const resetBtn = document.querySelector("#reset-game-btn")
         resetBtn.classList.remove("hidden")
+
+        const winnerMessage = document.querySelector("#winner-message")
+        winnerMessage.textContent = `${winnerName} is victorious!`
+        winnerMessage.classList.remove("hidden")
     },
 
     resetBoardElement() {
@@ -292,10 +294,12 @@ export const displayController = {
         const combatContainer = document.querySelector("#combat-container")
         const placementBoard = placementContainer.querySelector("#placement-board")
         const resetBtn = document.querySelector("#reset-game-btn")
+        const winnerMessage = document.querySelector("#winner-message")
 
         combatContainer.classList.add("hidden")
         placementContainer.classList.remove("hidden")
         resetBtn.classList.add("hidden")
+        winnerMessage.classList.add("hidden")
         
         currentShipIndex = 0
         currentDirection = "horizontal"

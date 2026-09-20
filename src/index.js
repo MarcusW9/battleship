@@ -2,7 +2,7 @@ import { createGameController } from "./modules/Controller.js";
 import { displayController } from "./modules/displayController.js";
 
 
-let admiralName = ""
+let admiralName;
 
 // Pass the callback into displayController to wait for user to enter name
 displayController.init({
