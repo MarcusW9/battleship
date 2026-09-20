@@ -270,6 +270,9 @@ export const displayController = {
         const resetBtn = document.querySelector("#reset-game-btn")
         resetBtn.classList.remove("hidden")
 
+        const headerText = document.querySelector("#header-text")
+        headerText.classList.add("hidden")
+
         const winnerMessage = document.querySelector("#winner-message")
         winnerMessage.textContent = `${winnerName} is victorious!`
         winnerMessage.classList.remove("hidden")
@@ -301,11 +304,13 @@ export const displayController = {
         const placementBoard = placementContainer.querySelector("#placement-board")
         const resetBtn = document.querySelector("#reset-game-btn")
         const winnerMessage = document.querySelector("#winner-message")
+        const headerText = document.querySelector("#header-text")
 
         combatContainer.classList.add("hidden")
         placementContainer.classList.remove("hidden")
         resetBtn.classList.add("hidden")
         winnerMessage.classList.add("hidden")
+        headerText.classList.remove("hidden")
         
         currentShipIndex = 0
         currentDirection = "horizontal"

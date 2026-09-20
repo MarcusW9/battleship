@@ -345,6 +345,12 @@ header > p {
     cursor: pointer;
 }
 
+#winner-message {
+    flex-basis: 100%;
+    font-size: 2rem;
+    text-align: center;
+}
+
 /* ==========================================
    RESPONSIVE / MOBILE STYLES
    ========================================== */
