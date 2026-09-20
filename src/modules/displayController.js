@@ -11,7 +11,7 @@ let currentShipIndex = 0;
 let currentDirection = "horizontal";
 
 export const displayController = {
-        init(gameController) {
+        init({ onBeginGame }) {
    
         const setupScreen = document.querySelector("#setup-screen")
         const startForm = document.querySelector("#start-form")
@@ -21,8 +21,6 @@ export const displayController = {
 
         const headerTitle = document.querySelector("#header-title")
         const headerText = document.querySelector("#header-text")
-
-        const startingPlacementBoard = document.querySelector("#placement-board")
         
         startForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -38,8 +36,8 @@ export const displayController = {
             // 3. Assign correct name to UI 
             headerText.textContent = `Admiral ${admiralName}, your ships await your orders!`
 
-            // 4. Setup board
-            this.setupPlacementPhase(gameController, startingPlacementBoard)
+            // 4. Trigger callback with the name passedthrough
+            onBeginGame(admiralName)
         })
     },
 
