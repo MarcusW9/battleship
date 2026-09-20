@@ -20,3 +20,8 @@ function beginGame(typedName) {
     // 3. Pass it into displayController
     displayController.resetGame(gameController)
 }
+
+const resetBtn = document.querySelector("#reset-game-btn")
+resetBtn.addEventListener("click", () =>{
+    beginGame(admiralName)
+})

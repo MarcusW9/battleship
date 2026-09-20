@@ -263,7 +263,7 @@ export const displayController = {
     },
 
     winGame() {
-        const resetBtn = document.getElementById("reset-game-btn")
+        const resetBtn = document.querySelector("#reset-game-btn")
         resetBtn.classList.remove("hidden")
     },
 
@@ -291,7 +291,7 @@ export const displayController = {
         const { placementContainer, player2Board } = this.resetBoardElement()
         const combatContainer = document.querySelector("#combat-container")
         const placementBoard = placementContainer.querySelector("#placement-board")
-        const resetBtn = document.getElementById("reset-game-btn")
+        const resetBtn = document.querySelector("#reset-game-btn")
 
         combatContainer.classList.add("hidden")
         placementContainer.classList.remove("hidden")
