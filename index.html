@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Marcus' Battleship</title>
+  <!-- Use type="module" to allow ES6 import/export statements -->
+      <script type="module" crossorigin src="/battleship/assets/index--Thy-D6b.js"></script>
+      <link rel="stylesheet" crossorigin href="/battleship/assets/index-t7d5AC4_.css">
+    </head>
+    <body>
+        <header>
+            <h1 id="header-title">BATTLESHIP</h1>
+            <p id="header-text">Prepare your fleet for battle!</p>
+        </header>
+
+<!-- SCREEN 1: Player Setup -->
+        <section id="setup-screen" class="screen">
+            <img id="form-image" src="/battleship/assets/Setup_Screen_Background-FRAjs0Gr.jpg" alt="Battleship in the ocean">
+            <form id="start-form">
+                <label for="player-name">Enter Commander Name:</label>
+                <input type="text" id="player-name" placeholder="Admiral" required />
+                <button type="submit" class="btn">Deploy Fleet</button>
+            </form>
+        </section>
+
+<!-- SCREEN 2: Battle Arena (HIDDEN on page load) -->
+        <section id="battle-screen" class="screen hidden">
+            <main id="game-container">
+                <div id="placement-container">
+                    <button id="rotate-ship-btn">Rotate axis</button>
+                    <div id="placement-board" class="grid"></div>
+                    <button id="start-battle-btn">Engage Enemy</button>
+                </div>
+
+                <div id="combat-container" class="hidden">
+                    <div id="winner-message" class="hidden"></div>
+                    <div id="player-one-board" class="grid"></div>
+                    <div id="player-two-board" class="grid"></div>
+                    <button id="reset-game-btn" class="hidden">Play again</button>
+                </div>
+            </main>
+        </section>
+    </body>
+</html>
