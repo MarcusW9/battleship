@@ -2,6 +2,8 @@
 
 **A browser Battleship game built with vanilla JavaScript, ES6 modules and factory functions, tested with Jest and bundled with Vite.** Part of [The Odin Project](https://www.theodinproject.com/lessons/node-path-javascript-battleship) curriculum.
 
+**[▶ Play it live](https://marcusw9.github.io/battleship/)**
+
 > This README is written as much for future me as for anyone visiting. If I come back to this in six months, the goal is that I can read this file and be productive again in ten minutes, without having to re-read every module to remember why I did things a certain way.
 
 **Status:** playable end to end — name entry → manual fleet placement → turn-based combat against a computer opponent → win message → play again without a page refresh. 22 unit tests passing across 4 suites.
@@ -13,11 +15,20 @@
 ```bash
 npm install      # install dependencies
 npm run dev      # start the Vite dev server, then open the printed localhost URL
-npm test         # run Jest in watch mode
-npx jest --watchAll=false   # run the suite once (e.g. before a commit)
+npm test         # run the suite once (e.g. before a commit)
+npm run test:watch   # run Jest in watch mode while developing
+npm run deploy   # build and publish dist/ to the gh-pages branch
 ```
 
-No build step is needed to play locally — Vite serves the ES modules directly. `npm run build` produces the `dist/` bundle if I ever want to deploy it.
+No build step is needed to play locally — Vite serves the ES modules directly. `npm run build` produces the `dist/` bundle.
+
+## Deployment
+
+The live version is hosted on GitHub Pages from the `gh-pages` branch, which holds only the built output — `main` stays the source branch and never contains `dist/`.
+
+`npm run deploy` does the whole job: the `predeploy` script runs `npm run build`, then the [`gh-pages`](https://github.com/tschaub/gh-pages) package force-pushes the contents of `dist/` to the `gh-pages` branch.
+
+The one thing that is easy to get wrong: Pages serves the site from `/battleship/`, not from the domain root, so `vite.config.mjs` sets `base: '/battleship/'`. Without it the built `index.html` asks for `/assets/index.js` and every asset 404s — the page loads blank with no obvious error. The config file uses the `.mjs` extension because this package is CommonJS by default, and Vite warns when it has to load ESM config syntax as CJS.
 
 ---
 
