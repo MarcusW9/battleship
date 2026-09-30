@@ -1,14 +1,5 @@
 import { createGameController } from "./Controller.js";
 import { createGameboard } from "./Gameboard.js";
-import { SHIP_PRESETS, createShip } from "./Ship.js"
-
-const fleetQueue = Object.entries(SHIP_PRESETS).map(([shipType, length]) => ({
-        shipType,
-        length
-    }))
-
-let currentShipIndex = 0;
-let currentDirection = "horizontal";
 
 export const displayController = {
         init({ onBeginGame }) {
@@ -94,7 +85,7 @@ export const displayController = {
             // Guard for if not a cell
             if (!e.target.classList.contains("cell")) return;
             // Guard for it all ships already placed
-            if (currentShipIndex >= fleetQueue.length) return
+            if (gameController.shipIndex >= gameController.fleetQueue.length) return
 
             // Clear from any previous hovers 
             this.clearHover(placementBoard)
@@ -102,19 +93,19 @@ export const displayController = {
             const currentCellRow = Number(e.target.dataset.x)
             const currentCellCol = Number(e.target.dataset.y)
 
-            const currentShip = fleetQueue[currentShipIndex]
+            const currentShip = gameController.fleetQueue[gameController.shipIndex]
             
             const currentShipHover = this.getShipCoordinates(
                 currentCellRow, 
                 currentCellCol,  
                 currentShip.length,
-                currentDirection)
+                gameController.shipDirection)
 
             const currentHoverValidity = gameController.player1Gameboard.isPlacementValid(
                 currentCellRow, 
                 currentCellCol,
                 currentShip.length,
-                currentDirection
+                gameController.shipDirection
             )
             
             for (const coordinates of currentShipHover) {
@@ -136,27 +127,22 @@ export const displayController = {
         
         // Guard for if not a cell
             if (!e.target.classList.contains("cell")) return;
-            if (currentShipIndex >= fleetQueue.length) return;
-
-            const currentShip = fleetQueue[currentShipIndex]
-            const shipInstance = createShip(currentShip.shipType)
+            if (gameController.shipIndex >= gameController.fleetQueue.length) return;
 
         // If it works
             const currentCellRow = Number(e.target.dataset.x)
             const currentCellCol = Number(e.target.dataset.y)
         
-            const result = gameController.player1Gameboard.placeShip (
+            
+            const result = gameController.placeCurrentShip (
                 currentCellRow, 
                 currentCellCol, 
-                shipInstance, 
-                currentDirection 
             )
 
             if (result.success) { 
-                currentShipIndex++ 
                 this.renderBoard(placementBoard, gameController.player1Gameboard)
 
-                if (currentShipIndex >= fleetQueue.length) {
+                if (gameController.shipIndex >= gameController.fleetQueue.length) {
                     // 1. Clear rotate button
                     const rotateBtn = document.querySelector("#rotate-ship-btn")
                     rotateBtn.classList.add("hidden")
@@ -171,7 +157,7 @@ export const displayController = {
 
         // Rotating a ship with the button
         rotateShipBtn.addEventListener("click", () => {
-            this.rotateShip()
+            gameController.rotateShip()
         })
     },
 
@@ -198,10 +184,6 @@ export const displayController = {
         boardElement.querySelectorAll('.cell').forEach(cell => {
             cell.classList.remove("valid-placement", "invalid-placement")
         })
-    },
-
-    rotateShip() {
-        return currentDirection = currentDirection === "horizontal" ? "vertical" : "horizontal"
     },
 
     startBattlePhase(gameController) {
@@ -311,9 +293,6 @@ export const displayController = {
         resetBtn.classList.add("hidden")
         winnerMessage.classList.add("hidden")
         headerText.classList.remove("hidden")
-        
-        currentShipIndex = 0
-        currentDirection = "horizontal"
 
         this.setupPlacementPhase(gameController, placementBoard)
     }

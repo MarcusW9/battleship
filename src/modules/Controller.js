@@ -1,5 +1,6 @@
 import { createGameboard } from "./Gameboard.js"
 import { createPlayer } from "./Player.js"
+import { SHIP_PRESETS, createShip } from "./Ship.js"
 
 export const createGameController = (
     player1Name = 'You', 
@@ -12,14 +13,42 @@ export const createGameController = (
 
     const player1Gameboard = createGameboard()
     const player2Gameboard = createGameboard()
+
+    const fleetQueue = Object.entries(SHIP_PRESETS).map(([shipType, length]) => ({
+        shipType,
+        length
+    }))
+
+    let currentShipIndex = 0;
+    let currentShipDirection = "horizontal";
+
+    const rotateShip = () => {
+        return currentShipDirection = currentShipDirection === "horizontal" ? "vertical" : "horizontal"
+    }
+
+    const placeCurrentShip = (
+        row, col
+    ) => {
+        const { shipType, length } = fleetQueue[currentShipIndex]
+        const result = player1Gameboard.placeShip (
+            row, 
+            col, 
+            createShip(shipType, length), 
+            currentShipDirection 
+        )
+        if (result.success) {
+            currentShipIndex++
+        }
+        return result
+    }
     
     const getDefendingBoard = () => {
-            return activePlayer === player1 ? player2Gameboard : player1Gameboard 
-        }
+        return activePlayer === player1 ? player2Gameboard : player1Gameboard 
+    }
 
     const switchTurn = () => {
-            activePlayer = activePlayer === player1 ? player2 : player1;
-        }
+        activePlayer = activePlayer === player1 ? player2 : player1;
+    }
 
     const playTurn = (row, col) => {
 
@@ -76,6 +105,11 @@ export const createGameController = (
         get player1Gameboard() { return player1Gameboard },
         get player2Gameboard() { return player2Gameboard },
         get activePlayer() { return activePlayer },
+        get shipIndex() { return currentShipIndex},
+        get shipDirection() { return currentShipDirection },
+        get fleetQueue() { return fleetQueue },
+        placeCurrentShip,
+        rotateShip,
         playTurn,
         automaticComputerMove
     }
