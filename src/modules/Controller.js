@@ -29,6 +29,9 @@ export const createGameController = (
     const placeCurrentShip = (
         row, col
     ) => {
+        // Guard
+        if (isPlacementComplete()) return { success: false } 
+
         const { shipType, length } = fleetQueue[currentShipIndex]
         const result = player1Gameboard.placeShip (
             row, 
@@ -41,7 +44,13 @@ export const createGameController = (
         }
         return result
     }
+
+    const getCurrentShip = () => {
+        return fleetQueue[currentShipIndex] ?? null
+    }
     
+    const isPlacementComplete = () => currentShipIndex >= fleetQueue.length
+
     const getDefendingBoard = () => {
         return activePlayer === player1 ? player2Gameboard : player1Gameboard 
     }
@@ -105,9 +114,9 @@ export const createGameController = (
         get player1Gameboard() { return player1Gameboard },
         get player2Gameboard() { return player2Gameboard },
         get activePlayer() { return activePlayer },
-        get shipIndex() { return currentShipIndex},
         get shipDirection() { return currentShipDirection },
-        get fleetQueue() { return fleetQueue },
+        getCurrentShip,
+        isPlacementComplete,
         placeCurrentShip,
         rotateShip,
         playTurn,

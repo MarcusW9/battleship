@@ -85,7 +85,7 @@ export const displayController = {
             // Guard for if not a cell
             if (!e.target.classList.contains("cell")) return;
             // Guard for it all ships already placed
-            if (gameController.shipIndex >= gameController.fleetQueue.length) return
+            if (gameController.isPlacementComplete()) return
 
             // Clear from any previous hovers 
             this.clearHover(placementBoard)
@@ -93,7 +93,7 @@ export const displayController = {
             const currentCellRow = Number(e.target.dataset.x)
             const currentCellCol = Number(e.target.dataset.y)
 
-            const currentShip = gameController.fleetQueue[gameController.shipIndex]
+            const currentShip = gameController.getCurrentShip()
             
             const currentShipHover = this.getShipCoordinates(
                 currentCellRow, 
@@ -127,7 +127,7 @@ export const displayController = {
         
         // Guard for if not a cell
             if (!e.target.classList.contains("cell")) return;
-            if (gameController.shipIndex >= gameController.fleetQueue.length) return;
+            if (gameController.isPlacementComplete()) return;
 
         // If it works
             const currentCellRow = Number(e.target.dataset.x)
@@ -142,7 +142,7 @@ export const displayController = {
             if (result.success) { 
                 this.renderBoard(placementBoard, gameController.player1Gameboard)
 
-                if (gameController.shipIndex >= gameController.fleetQueue.length) {
+                if (gameController.isPlacementComplete) {
                     // 1. Clear rotate button
                     const rotateBtn = document.querySelector("#rotate-ship-btn")
                     rotateBtn.classList.add("hidden")
