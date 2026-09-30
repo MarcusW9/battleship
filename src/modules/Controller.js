@@ -21,6 +21,8 @@ export const createGameController = (
 
     let currentShipIndex = 0;
     let currentShipDirection = "horizontal";
+    let gameOver = false
+    let winner = null
 
     const rotateShip = () => {
         return currentShipDirection = currentShipDirection === "horizontal" ? "vertical" : "horizontal"
@@ -61,6 +63,14 @@ export const createGameController = (
 
     const playTurn = (row, col) => {
 
+        if (gameOver) {
+            return {
+                success: false,
+                status: 'gameOver',
+                message: 'The game is already over.'
+            }
+        }
+
         // 1. Pick target board based on active player
         const defendingBoard = getDefendingBoard()
         
@@ -76,11 +86,15 @@ export const createGameController = (
         }
 
         // 4. If all ships sunk as a result of this hit trigger win 
-        if (defendingBoard.allShipsSunk()) return {
-            success: true,
-            status: 'win',
-            message: `${activePlayer.playerName} has sunk all opposing ships!`,
-            data: { winner: activePlayer }
+        if (defendingBoard.allShipsSunk()) {
+            gameOver = true
+            winner = activePlayer
+            return {
+                success: true,
+                status: 'win',
+                message: `${activePlayer.playerName} has sunk all opposing ships!`,
+                data: { winner: activePlayer }
+            }
         }
 
         // 5. Valid move and game continues
@@ -108,6 +122,8 @@ export const createGameController = (
         return playTurn(row, col);
     };
 
+    const isGameOver = () => gameOver
+
     return {
         get player1() { return player1 },
         get player2() { return player2 } ,
@@ -115,6 +131,7 @@ export const createGameController = (
         get player2Gameboard() { return player2Gameboard },
         get activePlayer() { return activePlayer },
         get shipDirection() { return currentShipDirection },
+        isGameOver,
         getCurrentShip,
         isPlacementComplete,
         placeCurrentShip,
