@@ -142,15 +142,9 @@ export const displayController = {
             if (result.success) { 
                 this.renderBoard(placementBoard, gameController.player1Gameboard)
 
-                if (gameController.isPlacementComplete) {
+                if (gameController.isPlacementComplete()) {
                     // 1. Clear rotate button
-                    const rotateBtn = document.querySelector("#rotate-ship-btn")
-                    rotateBtn.classList.add("hidden")
-
-                    //2. 
-                    startBtn.addEventListener("click", () => {
-                        this.startBattlePhase(gameController)
-                    })
+                    rotateShipBtn.classList.add("hidden")
                 }
             }
         })
@@ -158,6 +152,13 @@ export const displayController = {
         // Rotating a ship with the button
         rotateShipBtn.addEventListener("click", () => {
             gameController.rotateShip()
+        })
+
+        // Button to start the battle phase
+        startBtn.addEventListener("click", () => {
+            if (gameController.isPlacementComplete()) {
+                this.startBattlePhase(gameController)
+            }
         })
     },
 
