@@ -113,13 +113,22 @@ export const createGameController = (
         if (activePlayer.isHuman) return null;
 
         // 1. Get AI coordinates
+
         const move = activePlayer.computerMove();
         if (!move) return null;
 
         const [row, col] = move;
 
+        // Save the computer data before we switch turn
+        const computer = activePlayer 
         // 2. Simply delegate to playTurn!
-        return playTurn(row, col);
+        const result = playTurn(row, col);
+        
+        if (result.data?.attackResult) {
+            computer.recordResult(row, col, result.data.attackResult.status)
+        }
+
+        return result
     };
 
     const isGameOver = () => gameOver
