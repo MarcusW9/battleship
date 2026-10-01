@@ -1,5 +1,5 @@
 import { createGameboard } from "../src/modules/Gameboard.js";
-import { createShip, SHIP_PRESETS } from "../src/modules/Ship.js"
+import { createShip } from "../src/modules/Ship.js"
 
 test('create a 10x10 board', () => {
     const gameboard = createGameboard()

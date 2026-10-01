@@ -22,7 +22,6 @@ export const createGameController = (
     let currentShipIndex = 0;
     let currentShipDirection = "horizontal";
     let gameOver = false
-    let winner = null
 
     const rotateShip = () => {
         return currentShipDirection = currentShipDirection === "horizontal" ? "vertical" : "horizontal"
@@ -88,7 +87,6 @@ export const createGameController = (
         // 4. If all ships sunk as a result of this hit trigger win 
         if (defendingBoard.allShipsSunk()) {
             gameOver = true
-            winner = activePlayer
             return {
                 success: true,
                 status: 'win',

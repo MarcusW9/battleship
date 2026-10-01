@@ -1,6 +1,3 @@
-import { createGameController } from "./Controller.js";
-import { createGameboard } from "./Gameboard.js";
-
 export const displayController = {
         init({ onBeginGame }) {
    
@@ -75,7 +72,7 @@ export const displayController = {
         // Ensure the button is being rendered if it might have been hidden from previous round
         rotateShipBtn.classList.remove("hidden")
 
-        placementBoard.addEventListener("mouseleave", (e) => {
+        placementBoard.addEventListener("mouseleave", () => {
             this.clearHover(placementBoard)
         })
             
@@ -273,12 +270,11 @@ export const displayController = {
 
         return { 
             placementContainer : newPlacementContainer,
-            player2Board : newPlayer2Board
         }
     },
 
     resetGame(gameController) {
-        const { placementContainer, player2Board } = this.resetBoardElement()
+        const { placementContainer } = this.resetBoardElement()
         const combatContainer = document.querySelector("#combat-container")
         const placementBoard = placementContainer.querySelector("#placement-board")
         const resetBtn = document.querySelector("#reset-game-btn")
