@@ -2,7 +2,7 @@ export const createPlayer = (name, isHuman = true) => {
     const playerName = name; 
     let won = false;
     const allMoves = []
-    const targetQueue = []
+    const activeHits = []
 
     const attack = (gameboard, row, col) => {
         return gameboard.receiveAttack(row, col)
@@ -29,9 +29,11 @@ export const createPlayer = (name, isHuman = true) => {
         // 1. Guard against if human player, no need to run this
         if (isHuman === true) return null 
 
-        // 2. Hijack if found a hit
-        if (targetQueue.length > 0) {
-            return targetQueue.pop()
+        const targets = getTargets()
+        if (targets.length > 0) {
+            const [row, col] = targets[0]
+            takeFromAllMoves(row, col)        
+            return [row, col]
         }
 
         const randomIndex = movePicker();
@@ -53,23 +55,51 @@ export const createPlayer = (name, isHuman = true) => {
         return true
     }
 
-    // Function to check the result of a hit and generate hunter attacks from it 
+    // Function to check the result of a hit and record
     const recordResult = (row, col, status) => {
-    if (status === 'hit') {
-        const neighbours = findTargets(row, col)
-        for (const [r, c] of neighbours) {
-            if (takeFromAllMoves(r, c)) {
-                targetQueue.push([r, c])
-                } 
-            } 
+        if (status === 'hit') {
+            activeHits.push([row, col])
         } else if (status === 'sunk') {
-            targetQueue.length = 0
+            activeHits.length = 0
         }
     }
+   
+    const isUntried = (row, col) => allMoves.some(([mr, mc]) => mr === row && mc === col)
 
-    const findTargets = (row, col) => {
+    const getTargets = () => {
+
+        // Prioritise lines
+        const line = findLineTargets().filter(([r, c]) => isUntried(r, c))
+        if (line.length > 0) return line
+
+        // If not prioritise available neighbours
+        return activeHits
+            .flatMap(([r, c]) => findNeighbourTargets(r, c))
+            .filter(([r, c]) => isUntried(r, c))
+    }
+
+    const findNeighbourTargets = (row, col) => {
         const neighbours = [[row - 1, col], [row + 1, col], [row, col + 1], [row, col - 1]]
         return neighbours
+    }
+
+    const findLineTargets = () => {
+        if (activeHits.length < 2) return []
+        
+        const sameRow = activeHits.every(([r]) => r === activeHits[0][0])
+        if (sameRow) {
+            const row = activeHits[0][0]
+            const cols = activeHits.map(([, c]) => c)
+            return [[row, Math.min(...cols) - 1], [row, Math.max(...cols) + 1]]
+        }
+
+        const sameCol = activeHits.every(([, c]) => c === activeHits[0][1])
+        if (sameCol) {
+            const col = activeHits[0][1]
+            const rows = activeHits.map(([r, ]) => r)
+            return [[Math.min(...rows) - 1, col], [Math.max(...rows) + 1, col]]
+        }
+        return []
     }
 
     return { 
