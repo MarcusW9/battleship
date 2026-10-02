@@ -92,3 +92,15 @@ test('confirms ship model evaluates isSunk as true when all segments are hit', (
     expect(gameboard.board[1][1].isSunk()).toBe(true)
 })
 
+
+test('sunk result reports every cell of the sunk ship', () => {
+    const gameboard = createGameboard()
+    gameboard.placeShip(1, 1, createShip('Cruiser'), 'horizontal')
+
+    gameboard.receiveAttack(1, 1)
+    gameboard.receiveAttack(1, 2)
+    const result = gameboard.receiveAttack(1, 3)
+
+    expect(result.status).toBe('sunk')
+    expect(result.data.sunkShipCells).toEqual([[1, 1], [1, 2], [1, 3]])
+})

@@ -48,3 +48,23 @@ test('computer moves are mutually exlusive and exhaustive', () => {
     }
     expect(playedMovesSet.size).toEqual(100)
 })
+test('computer follows the line after two hits in a row', () => {
+    const computer = createPlayer('Computer', false)
+    computer.recordResult(3, 2, 'hit')
+    computer.recordResult(3, 3, 'hit')
+
+    // Only the two line ends make sense, not the cells above or below
+    expect([[3, 1], [3, 4]]).toContainEqual(computer.computerMove())
+})
+
+test('computer keeps targeting a touching ship after another one sinks', () => {
+    const computer = createPlayer('Computer', false)
+    computer.recordResult(3, 2, 'hit')    // Destroyer
+    computer.recordResult(4, 2, 'hit')    // touching Submarine
+    computer.recordResult(3, 3, 'sunk', [[3, 2], [3, 3]])
+
+    // Only the Submarine hit at (4,2) should remain, so the next shot is one of its neighbours.
+    // (3,2) is included because recording a result directly doesn't remove it from allMoves
+    const nextToSubmarineHit = [[3, 2], [5, 2], [4, 1], [4, 3]]
+    expect(nextToSubmarineHit).toContainEqual(computer.computerMove())
+})

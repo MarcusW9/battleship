@@ -83,3 +83,25 @@ test('Cannot trigger play turn on the same cell', () => {
     expect(gameController.activePlayer.playerName).toBe("TestName");
     expect(gameController.playTurn(1, 2).success).toBe(true)
 })
+// Integration test: the controller must pass the sunk ship's cells through to the computer
+test('automaticComputerMove passes sunk ship cells to the computer', () => {
+    const gameController = createGameController('TestName')
+    const computer = gameController.player2
+
+    // Two ships so sinking one doesn't end the game
+    gameController.player1Gameboard.placeShip(3, 2, createShip('Destroyer'), 'horizontal')
+    gameController.player1Gameboard.placeShip(5, 5, createShip('Submarine'), 'vertical')
+
+    // Script the computer's shots onto the Destroyer
+    jest.spyOn(computer, 'computerMove')
+        .mockReturnValueOnce([3, 2])
+        .mockReturnValueOnce([3, 3])
+    const recordSpy = jest.spyOn(computer, 'recordResult')
+
+    gameController.playTurn(0, 0)              // human
+    gameController.automaticComputerMove()     // hit (3,2)
+    gameController.playTurn(0, 1)              // human
+    gameController.automaticComputerMove()     // sinks the Destroyer at (3,3)
+
+    expect(recordSpy).toHaveBeenLastCalledWith(3, 3, 'sunk', [[3, 2], [3, 3]])
+})
