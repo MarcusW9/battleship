@@ -152,11 +152,21 @@ const createGameboard = () => {
 
         // 5. Return sunk if the boat hit is now sunk
         if (board[row][col].isSunk()) {
+
+            const sunkShip = board[row][col]
+            const sunkShipCells = []
+            
+            for (let r = 0; r < board.length; r++) {
+                for (let c = 0; c < board[r].length; c++) {
+                    if (board[r][c] === sunkShip) sunkShipCells.push([r, c])
+                }
+            }
+
             return { 
                 success: true,
                 status: 'sunk', 
                 message: 'You have sunk the ship!',
-                data : { row, col }
+                data : { row, col, sunkShipCells }
             }
         }
         // Return his if boat is hit but not sunk

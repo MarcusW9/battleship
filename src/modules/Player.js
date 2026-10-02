@@ -56,11 +56,19 @@ export const createPlayer = (name, isHuman = true) => {
     }
 
     // Function to check the result of a hit and record
-    const recordResult = (row, col, status) => {
+    const recordResult = (row, col, status, sunkShipCells = []) => {
         if (status === 'hit') {
             activeHits.push([row, col])
         } else if (status === 'sunk') {
+
+            // Define the helper function to await a coordinate to check if its in shipCells
+            const isPartOfSunkShip = ([r, c]) => sunkShipCells.some(([sr, sc]) => r === sr && c === sc)
+            
+
+            // Filter out the cells part of the sunkShip
+            const remaining = activeHits.filter((hit) => !isPartOfSunkShip(hit))
             activeHits.length = 0
+            activeHits.push(...remaining)
         }
     }
    

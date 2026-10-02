@@ -123,7 +123,8 @@ export const createGameController = (
         const result = playTurn(row, col);
         
         if (result.data?.attackResult) {
-            computer.recordResult(row, col, result.data.attackResult.status)
+            const { status, data } = result.data.attackResult
+            computer.recordResult(row, col, status, data.sunkShipCells)
         }
 
         return result
